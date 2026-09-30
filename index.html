@@ -1,172 +1,231 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" id="htmlRoot">
 <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>نظام إدارة الأجهزة ومهمات الصيانة التقنية</title>
-        <!-- Tailwind CSS -->
+        <meta name="auther" content="TAREK Mujarkesh">
+        <meta name="description" content="تم انشاء هذا الموقع لشركة الحافظ للبرادات والاجهزة المنزلية في قسم ادارة HARDWERE لغرض تسهيل ادارة الحواسيب وعمليات الصيانة">
+        <title data-i18n="pageTitle">نظام إدارة الأجهزة ومهمات الصيانة التقنية</title>
         <script src="https://cdn.tailwindcss.com"></script>
-        <!-- Chart.js for Donut Chart -->
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <!-- SheetJS for Excel Reading & Exporting -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-        <!-- Google Fonts Cairo -->
         <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
-        <!-- FontAwesome -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <script>
-                tailwind.config = {
-                        theme: {
-                                extend: {
-                                        fontFamily: {
-                                                sans: ['Cairo', 'sans-serif'],
-                                        },
-                                }
-                        }
-                }
+                tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Cairo', 'sans-serif'] } } } }
         </script>
         <style>
-                body {
-                        font-family: 'Cairo', sans-serif;
-                        background: linear-gradient(135deg, #090d16 0%, #111827 50%, #0f172a 100%);
-                        min-height: 100vh;
-                        color: #f8fafc;
-                }
-                .glass-panel {
-                        background: rgba(30, 41, 59, 0.65);
-                        backdrop-filter: blur(16px);
-                        -webkit-backdrop-filter: blur(16px);
-                        border: 1px solid rgba(255, 255, 255, 0.08);
-                        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-                }
-                .glass-panel-hover {
-                        transition: all 0.3s ease;
-                }
-                .glass-panel-hover:hover {
-                        border-color: rgba(56, 189, 248, 0.3);
-                        box-shadow: 0 12px 40px 0 rgba(56, 189, 248, 0.1);
-                }
-                .glass-input {
-                        background: rgba(15, 23, 42, 0.7);
-                        border: 1px solid rgba(255, 255, 255, 0.12);
-                        color: #ffffff;
-                }
-                .glass-input:focus {
-                        border-color: #38bdf8;
-                        outline: none;
-                        box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
-                }
-                ::-webkit-calendar-picker-indicator {
-                        filter: invert(1);
-                        cursor: pointer;
-                }
-                ::-webkit-scrollbar {
-                        width: 8px;
-                        height: 10px;
-                }
-                ::-webkit-scrollbar-track {
-                        background: rgba(15, 23, 42, 0.6);
-                        border-radius: 6px;
-                }
-                ::-webkit-scrollbar-thumb {
-                        background: rgba(56, 189, 248, 0.4);
-                        border-radius: 6px;
-                }
-                ::-webkit-scrollbar-thumb:hover {
-                        background: rgba(56, 189, 248, 0.8);
+                body { font-family: 'Cairo', sans-serif; min-height: 100vh; transition: background 0.3s ease, color 0.3s ease; }
+                body.dark-mode { background: linear-gradient(135deg, #090d16 0%, #111827 50%, #0f172a 100%); color: #f8fafc; }
+                body.dark-mode .glass-panel { background: rgba(30, 41, 59, 0.65); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); }
+                body.dark-mode .glass-input { background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.12); color: #ffffff; }
+                body.light-mode { background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #cbd5e1 100%); color: #0f172a; }
+                body.light-mode .glass-panel { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(0, 0, 0, 0.08); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1); }
+                body.light-mode .glass-input { background: rgba(241, 245, 249, 0.9); border: 1px solid rgba(0, 0, 0, 0.15); color: #0f172a; }
+                body.light-mode .text-slate-400 { color: #64748b !important; }
+                body.light-mode .text-slate-300 { color: #475569 !important; }
+                body.light-mode .text-slate-200 { color: #1e293b !important; }
+                body.light-mode table thead tr { background-color: #e2e8f0 !important; color: #0f172a !important; }
+                .glass-input:focus { border-color: #38bdf8; outline: none; box-shadow: 0 0 15px rgba(56, 189, 248, 0.3); }
+                ::-webkit-calendar-picker-indicator { cursor: pointer; padding: 2px; }
+                body.dark-mode ::-webkit-calendar-picker-indicator { filter: invert(1); }
+                ::-webkit-scrollbar { width: 8px; height: 10px; }
+                ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.2); border-radius: 6px; }
+                ::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.4); border-radius: 6px; }
+                @media print {
+                        @page { size: A4; margin: 10mm 15mm; }
+                        body { background: white !important; color: black !important; }
+                        .no-print { display: none !important; }
+                        #maintenanceReportModal { position: static !important; background: white !important; display: block !important; }
                 }
         </style>
 </head>
-<body class="p-4 sm:p-6 lg:p-8" onload="initApp()">
-        <div class="max-w-7xl mx-auto space-y-6">
-                
-                <!-- Header Section -->
-                <header class="glass-panel rounded-2xl p-5 sm:p-6 flex flex-col md:flex-row justify-between items-center gap-4">
-                        <div class="flex items-center gap-4">
-                                <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/30 text-2xl font-bold">
-                                        <i class="fa-solid fa-file-excel"></i>
-                                </div>
+<body class="p-4 sm:p-6 lg:p-8 dark-mode relative" onload="initApp()">
+
+        <div class="fixed top-4 left-4 z-50 no-print">
+                <div class="relative">
+                        <button type="button" onclick="toggleSettingsDropdown()" class="w-12 h-12 rounded-2xl glass-panel hover:scale-105 text-cyan-400 flex items-center justify-center transition-all border border-slate-700 shadow-2xl cursor-pointer">
+                                <i class="fa-solid fa-gear text-xl"></i>
+                        </button>
+                        <div id="settingsDropdown" class="absolute left-0 mt-2 w-64 rounded-2xl glass-panel p-4 shadow-2xl border border-slate-700 hidden z-50 space-y-4 text-right">
                                 <div>
-                                        <h1 class="text-2xl sm:text-3xl font-black tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-indigo-300">
-                                                نظام إدارة الأجهزة ومهمات الصيانة
-                                        </h1>
-                                        <p class="text-xs sm:text-sm text-slate-400 mt-1">إدارة ملفات الإكسل وسجلات صيانة الأجهزة التقنية المتقدمة</p>
+                                        <label class="text-xs font-bold text-cyan-300 block mb-1.5" data-i18n="langLabel">لغة الموقع (Language)</label>
+                                        <select id="langSelect" onchange="changeLanguage(this.value)" class="w-full px-3 py-2 rounded-xl glass-input text-xs cursor-pointer">
+                                                <option value="ar">اللغة العربية (Arabic)</option>
+                                                <option value="en">English (الإنجليزية)</option>
+                                        </select>
+                                </div>
+                                <div class="pt-3 border-t border-slate-700/60">
+                                        <label class="flex items-center gap-3 cursor-pointer select-none">
+                                                <input type="checkbox" id="darkModeCheckbox" onchange="toggleDarkMode(this.checked)" class="w-4 h-4 rounded text-cyan-500 focus:ring-cyan-400 glass-input cursor-pointer" checked>
+                                                <span class="text-xs font-semibold text-slate-200" data-i18n="darkModeLabel">الوضع المظلم (Dark Mode)</span>
+                                        </label>
+                                </div>
+                                <div id="changePasswordMenuOption" class="pt-3 border-t border-slate-700/60 hidden">
+                                        <button type="button" onclick="openChangePasswordModal()" class="w-full py-2 px-3 rounded-xl bg-amber-500/25 hover:bg-amber-500/40 text-amber-300 text-xs font-bold flex items-center justify-center gap-2 transition-all border border-amber-500/30 cursor-pointer">
+                                                <i class="fa-solid fa-key"></i> <span data-i18n="changePassMenuBtn">تغيير كلمة المرور</span>
+                                        </button>
                                 </div>
                         </div>
-                        
+                </div>
+        </div>
+
+        <div id="loginModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 no-print">
+                <div class="glass-panel w-full max-w-md rounded-3xl p-8 relative border border-cyan-500/30 shadow-2xl text-center space-y-6">
+                        <div class="w-20 h-20 rounded-3xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/30 text-3xl font-bold mx-auto text-white">
+                                <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+                        <div>
+                                <h2 class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-indigo-300" data-i18n="loginTitle">تسجيل الدخول للنظام</h2>
+                                <p class="text-xs text-slate-400 mt-1" data-i18n="loginSub">اختر نمط الاستخدام للمتابعة</p>
+                        </div>
+                        <div class="grid grid-cols-1 gap-4 pt-2">
+                                <button type="button" onclick="selectUserRole('viewer')" class="p-4 rounded-2xl glass-panel border border-slate-700 hover:border-cyan-400 flex items-center gap-4 text-right transition-all cursor-pointer group">
+                                        <div class="w-12 h-12 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-xl group-hover:scale-110 transition-transform"><i class="fa-solid fa-eye"></i></div>
+                                        <div>
+                                                <div class="font-bold text-slate-200 text-sm" data-i18n="viewerRole">يوزر مستعرض (بدون كلمة سر)</div>
+                                                <div class="text-[11px] text-slate-400" data-i18n="viewerDesc">استعراض مواصفات الأجهزة والتقارير دون تعديل أو إضافة</div>
+                                        </div>
+                                </button>
+                                <button type="button" onclick="openAdminPasswordPrompt()" class="p-4 rounded-2xl glass-panel border border-slate-700 hover:border-amber-400 flex items-center gap-4 text-right transition-all cursor-pointer group">
+                                        <div class="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-xl group-hover:scale-110 transition-transform"><i class="fa-solid fa-user-shield"></i></div>
+                                        <div>
+                                                <div class="font-bold text-slate-200 text-sm" data-i18n="adminRole">يوزر مدير (Admin)</div>
+                                                <div class="text-[11px] text-slate-400" data-i18n="adminDesc">صلاحيات كاملة لإضافة، تعديل، وحذف الأجهزة والصيانة</div>
+                                        </div>
+                                </button>
+                        </div>
+                </div>
+        </div>
+
+        <div id="adminPasswordModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 hidden no-print">
+                <div class="glass-panel w-full max-w-sm rounded-3xl p-6 sm:p-8 relative border border-amber-500/40 shadow-2xl text-center space-y-5">
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-600 flex items-center justify-center shadow-lg shadow-amber-500/30 text-2xl font-bold mx-auto text-white"><i class="fa-solid fa-key"></i></div>
+                        <div>
+                                <h3 class="text-xl font-black text-amber-300" data-i18n="adminPassTitle">تحقق صلاحيات المدير</h3>
+                                <p class="text-xs text-slate-400 mt-1" data-i18n="adminPassSub">الرجاء إدخال كلمة المرور للمتابعة</p>
+                        </div>
+                        <form onsubmit="verifyAdminPassword(event)" class="space-y-4">
+                                <div class="relative">
+                                        <span class="absolute inset-y-0 right-0 flex items-center pr-3.5 pointer-events-none text-slate-400"><i class="fa-solid fa-lock"></i></span>
+                                        <input type="password" id="adminPasswordInput" required placeholder="كلمة المرور..." class="w-full pr-10 pl-4 py-3 rounded-xl glass-input text-sm text-center tracking-widest font-bold" data-i18n-placeholder="passwordPlaceholder">
+                                </div>
+                                <div class="flex gap-2 pt-2">
+                                        <button type="button" onclick="closeAdminPasswordPrompt()" class="flex-1 py-2.5 rounded-xl bg-slate-700 hover:bg-slate-600 text-white font-medium text-xs transition-all cursor-pointer" data-i18n="cancelBtn">إلغاء</button>
+                                        <button type="submit" class="flex-1 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs transition-all shadow-lg cursor-pointer" data-i18n="loginBtn">دخول</button>
+                                </div>
+                        </form>
+                </div>
+        </div>
+
+        <div id="changePasswordModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 hidden no-print">
+                <div class="glass-panel w-full max-w-sm rounded-3xl p-6 sm:p-8 relative border border-amber-500/40 shadow-2xl text-center space-y-4">
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-600 flex items-center justify-center shadow-lg shadow-amber-500/30 text-2xl font-bold mx-auto text-white"><i class="fa-solid fa-key"></i></div>
+                        <div>
+                                <h3 class="text-xl font-black text-amber-300" data-i18n="changePassModalTitle">تغيير كلمة المرور</h3>
+                                <p class="text-xs text-slate-400 mt-1" data-i18n="changePassModalSub">أدخل كلمة المرور القديمة والجديدة</p>
+                        </div>
+                        <form onsubmit="saveNewAdminPassword(event)" class="space-y-3">
+                                <div class="relative">
+                                        <span class="absolute inset-y-0 right-0 flex items-center pr-3.5 pointer-events-none text-slate-400"><i class="fa-solid fa-lock"></i></span>
+                                        <input type="password" id="oldPasswordInput" required placeholder="كلمة المرور القديمة..." class="w-full pr-10 pl-4 py-2.5 rounded-xl glass-input text-xs text-center tracking-widest font-bold" data-i18n-placeholder="oldPassPlaceholder">
+                                </div>
+                                <div class="relative">
+                                        <span class="absolute inset-y-0 right-0 flex items-center pr-3.5 pointer-events-none text-slate-400"><i class="fa-solid fa-lock"></i></span>
+                                        <input type="password" id="newPasswordInput" required placeholder="كلمة المرور الجديدة..." class="w-full pr-10 pl-4 py-2.5 rounded-xl glass-input text-xs text-center tracking-widest font-bold" data-i18n-placeholder="newPassPlaceholder">
+                                </div>
+                                <div class="flex gap-2 pt-2">
+                                        <button type="button" onclick="closeChangePasswordModal()" class="flex-1 py-2.5 rounded-xl bg-slate-700 hover:bg-slate-600 text-white font-medium text-xs transition-all cursor-pointer" data-i18n="cancelBtn">إلغاء</button>
+                                        <button type="submit" class="flex-1 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs transition-all shadow-lg cursor-pointer" data-i18n="savePassBtn">حفظ</button>
+                                </div>
+                        </form>
+                </div>
+        </div>
+
+        <div id="deletePasswordModal" class="fixed inset-0 z-[60] flex items-center justify-center bg-black/85 backdrop-blur-md p-4 hidden no-print">
+                <div class="glass-panel w-full max-w-sm rounded-3xl p-6 sm:p-8 relative border border-rose-500/40 shadow-2xl text-center space-y-5">
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-rose-600 to-red-700 flex items-center justify-center shadow-lg shadow-rose-600/30 text-2xl font-bold mx-auto text-white"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                        <div>
+                                <h3 class="text-xl font-black text-rose-400" data-i18n="delModalTitle">تأكيد حذف الجهاز</h3>
+                                <p class="text-xs text-slate-300 mt-1" data-i18n="delModalSub">أدخل كلمة المرور للتأكيد:</p>
+                        </div>
+                        <form onsubmit="confirmDeleteDevice(event)" class="space-y-4">
+                                <div class="relative">
+                                        <span class="absolute inset-y-0 right-0 flex items-center pr-3.5 pointer-events-none text-slate-400"><i class="fa-solid fa-lock text-rose-400"></i></span>
+                                        <input type="password" id="deletePasswordInput" required placeholder="كلمة المرور..." class="w-full pr-10 pl-4 py-3 rounded-xl glass-input text-sm text-center tracking-widest font-bold" data-i18n-placeholder="passwordPlaceholder">
+                                </div>
+                                <div class="flex gap-2 pt-2">
+                                        <button type="button" onclick="closeDeletePasswordPrompt()" class="flex-1 py-2.5 rounded-xl bg-slate-700 hover:bg-slate-600 text-white font-medium text-xs transition-all cursor-pointer" data-i18n="cancelBtn">إلغاء</button>
+                                        <button type="submit" class="flex-1 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs transition-all shadow-lg cursor-pointer" data-i18n="confirmDelBtn">تأكيد الحذف</button>
+                                </div>
+                        </form>
+                </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto space-y-6">
+                <header class="glass-panel rounded-2xl p-5 sm:p-6 flex flex-col md:flex-row justify-between items-center gap-4 no-print relative">
+                        <div class="flex items-center gap-4">
+                                <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/30 text-2xl font-bold text-white"><i class="fa-solid fa-file-excel"></i></div>
+                                <div>
+                                        <h1 class="text-2xl sm:text-3xl font-black tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-indigo-300" data-i18n="mainHeaderTitle">نظام إدارة الأجهزة ومهمات الصيانة</h1>
+                                        <p class="text-xs sm:text-sm text-slate-400 mt-1 flex items-center gap-2">
+                                                <span data-i18n="mainHeaderSub">إدارة ملفات الإكسل وسجلات صيانة الأجهزة</span>
+                                                <span id="userRoleBadge" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold"></span>
+                                        </p>
+                                </div>
+                        </div>
                         <div class="flex flex-wrap items-center gap-3">
-                                <button onclick="openMaintenanceModal()" class="px-4 py-2.5 rounded-xl bg-amber-600/80 hover:bg-amber-500 text-white font-semibold transition-all shadow-lg shadow-amber-600/20 flex items-center gap-2 border border-amber-400/30 text-sm">
-                                        <i class="fa-solid fa-screwdriver-wrench"></i> تسجيل صيانة جديدة
-                                </button>
-                                <button onclick="openMaintenanceReportModal()" class="px-4 py-2.5 rounded-xl bg-indigo-600/80 hover:bg-indigo-500 text-white font-semibold transition-all shadow-lg shadow-indigo-600/20 flex items-center gap-2 border border-indigo-400/30 text-sm">
-                                        <i class="fa-solid fa-clipboard-list"></i> تقرير الصيانة الشامل
-                                </button>
-                                <label class="px-4 py-2.5 rounded-xl bg-cyan-600/80 hover:bg-cyan-500 text-white font-semibold transition-all shadow-lg shadow-cyan-600/20 flex items-center gap-2 border border-cyan-400/30 text-sm cursor-pointer">
-                                        <i class="fa-solid fa-upload"></i> رفع إكسل
+                                <button type="button" id="addDeviceBtn" onclick="openAddDeviceModal()" class="px-4 py-2.5 rounded-xl bg-cyan-600/80 hover:bg-cyan-500 text-white font-semibold transition-all shadow-lg flex items-center gap-2 text-sm cursor-pointer"><i class="fa-solid fa-circle-plus"></i> <span data-i18n="addDeviceBtnText">إضافة جهاز جديد</span></button>
+                                <button type="button" id="maintBtn" onclick="openMaintenanceModal()" class="px-4 py-2.5 rounded-xl bg-amber-600/80 hover:bg-amber-500 text-white font-semibold transition-all shadow-lg flex items-center gap-2 text-sm cursor-pointer"><i class="fa-solid fa-screwdriver-wrench"></i> <span data-i18n="maintBtnText">تسجيل صيانة جديدة</span></button>
+                                <button type="button" onclick="openMaintenanceReportModal()" class="px-4 py-2.5 rounded-xl bg-indigo-600/80 hover:bg-indigo-500 text-white font-semibold transition-all shadow-lg flex items-center gap-2 text-sm cursor-pointer"><i class="fa-solid fa-clipboard-list"></i> <span data-i18n="reportBtnText">تقرير الصيانة الشامل</span></button>
+                                <label id="uploadExcelLabel" class="px-4 py-2.5 rounded-xl bg-blue-600/80 hover:bg-blue-500 text-white font-semibold transition-all shadow-lg flex items-center gap-2 text-sm cursor-pointer">
+                                        <i class="fa-solid fa-upload"></i> <span data-i18n="uploadBtnText">رفع إكسل</span>
                                         <input type="file" id="excelFile" accept=".xlsx, .xls" onchange="handleFile(event)" class="hidden">
                                 </label>
-                                <button onclick="exportToExcel()" class="px-4 py-2.5 rounded-xl bg-emerald-600/80 hover:bg-emerald-500 text-white font-semibold transition-all shadow-lg shadow-emerald-600/20 flex items-center gap-2 border border-emerald-400/30 text-sm">
-                                        <i class="fa-solid fa-download"></i> تصدير
-                                </button>
+                                <button type="button" onclick="exportToExcel()" class="px-4 py-2.5 rounded-xl bg-emerald-600/80 hover:bg-emerald-500 text-white font-semibold transition-all shadow-lg flex items-center gap-2 text-sm cursor-pointer"><i class="fa-solid fa-download"></i> <span data-i18n="exportBtnText">تصدير</span></button>
+                                <button type="button" onclick="switchUserRole()" class="px-3 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold transition-all border border-slate-700 text-xs cursor-pointer" title="تبديل المستخدم"><i class="fa-solid fa-right-from-bracket"></i></button>
                         </div>
                 </header>
 
-                <!-- Sheets Navigation Tabs -->
-                <div id="tabsContainer" class="flex flex-wrap gap-2">
-                        <!-- Dynamic sheets tabs -->
-                </div>
+                <div id="tabsContainer" class="flex flex-wrap gap-2 no-print"></div>
 
-                <!-- Compact Horizontal Statistics Panel -->
-                <section class="glass-panel rounded-2xl p-4 sm:p-5 flex flex-col xl:flex-row items-center justify-between gap-4">
+                <section class="glass-panel rounded-2xl p-4 sm:p-5 flex flex-col xl:flex-row items-center justify-between gap-4 no-print">
                         <div class="flex items-center gap-4 shrink-0 border-b xl:border-b-0 xl:border-l border-slate-700/60 pb-3 xl:pb-0 xl:pl-6 w-full xl:w-auto justify-between xl:justify-start">
                                 <div>
-                                        <h2 class="text-sm font-bold text-cyan-300 flex items-center gap-2 mb-0.5">
-                                                <i class="fa-solid fa-chart-pie"></i> إحصائيات الأقسام
-                                        </h2>
-                                        <p class="text-[11px] text-slate-400">توزيع الأجهزة حسب القسم الحالي</p>
+                                        <h2 class="text-sm font-bold text-cyan-300 flex items-center gap-2 mb-0.5"><i class="fa-solid fa-chart-pie"></i> <span data-i18n="deptStatsTitle">إحصائيات الأقسام</span></h2>
+                                        <p class="text-[11px] text-slate-400" data-i18n="deptStatsSub">توزيع الأجهزة حسب القسم الحالي</p>
                                 </div>
                                 <div class="relative w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center shrink-0">
                                         <canvas id="deptDonutChart"></canvas>
                                         <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                                                 <span id="totalRecordsBadge" class="text-xs font-black text-cyan-300">0</span>
-                                                <span class="text-[9px] text-slate-400">جهاز</span>
+                                                <span class="text-[9px] text-slate-400" data-i18n="deviceWord">جهاز</span>
                                         </div>
                                 </div>
                         </div>
-                        
-                        <!-- Horizontal Scrollable Dynamic Cards -->
-                        <div id="chartLegend" class="w-full flex-1 flex items-center gap-3 overflow-x-auto pb-2 pt-1 px-1">
-                                <!-- Dynamic Legend Cards -->
-                        </div>
+                        <div id="chartLegend" class="w-full flex-1 flex items-center gap-3 overflow-x-auto pb-2 pt-1 px-1"></div>
                 </section>
 
-                <!-- Main Table & Search Panel -->
-                <section class="glass-panel rounded-2xl p-5 sm:p-6 flex flex-col">
+                <section class="glass-panel rounded-2xl p-5 sm:p-6 flex flex-col no-print">
                         <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-5">
                                 <div class="relative w-full sm:w-96">
-                                        <span class="absolute inset-y-0 right-0 flex items-center pr-3.5 pointer-events-none text-slate-400">
-                                                <i class="fa-solid fa-search"></i>
-                                        </span>
-                                        <input type="text" id="searchInput" oninput="filterTable()" placeholder="ابحث في السجلات..."
-                                               class="w-full pr-10 pl-4 py-2.5 rounded-xl glass-input text-sm transition-all">
+                                        <span class="absolute inset-y-0 right-0 flex items-center pr-3.5 pointer-events-none text-slate-400"><i class="fa-solid fa-search"></i></span>
+                                        <input type="text" id="searchInput" oninput="filterTable()" placeholder="ابحث في السجلات..." class="w-full pr-10 pl-4 py-2.5 rounded-xl glass-input text-sm transition-all" data-i18n-placeholder="searchPlaceholder">
                                 </div>
                                 <div class="text-xs text-slate-400 bg-slate-800/40 px-3.5 py-2 rounded-xl border border-slate-700/50">
-                                        💡 <span class="text-cyan-300 font-medium">انقر على اسم الموظف أو الجهاز</span> لعرض المواصفات الفنية الكاملة
+                                        💡 <span class="text-cyan-300 font-medium" data-i18n="tableTip">انقر على اسم الموظف أو الجهاز</span> لعرض وتعديل المواصفات الفنية الكاملة
                                 </div>
                         </div>
-
                         <div class="overflow-x-auto rounded-xl border border-slate-700/50 flex-1 max-h-[500px] relative">
                                 <table class="w-full text-right border-collapse">
                                         <thead>
-                                                <tr id="tableHeader" class="bg-slate-800/95 text-cyan-300 text-xs uppercase tracking-wider border-b border-slate-700 sticky top-0 z-20 shadow-md">
-                                                </tr>
+                                                <tr id="tableHeader" class="bg-slate-800/95 text-cyan-300 text-xs uppercase tracking-wider border-b border-slate-700 sticky top-0 z-20 shadow-md"></tr>
                                         </thead>
                                         <tbody id="tableBody" class="divide-y divide-slate-800/60 text-sm">
-                                                <tr><td colspan="10" class="text-center py-16 text-slate-400">يرجى رفع ملف إكسل (.xlsx أو .xls) لعرض البيانات</td></tr>
+                                                <tr><td colspan="10" class="text-center py-16 text-slate-400" data-i18n="emptyTableMsg">يرجى رفع ملف إكسل أو إضافة جهاز جديد للبدء</td></tr>
                                         </tbody>
                                 </table>
                         </div>
-
                         <div class="mt-4 flex justify-between items-center text-xs text-slate-400">
                                 <span id="tableCountInfo">عرض 0 من 0 سجل</span>
                                 <span class="text-cyan-400 font-semibold"><i class="fa-solid fa-shield-halved"></i> Excel Sheet Reader System</span>
@@ -174,680 +233,586 @@
                 </section>
         </div>
 
-        <!-- Details Modal -->
-        <div id="detailsModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm hidden p-4">
+        <div id="detailsModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm hidden p-4 no-print">
                 <div class="glass-panel w-full max-w-3xl rounded-3xl p-6 sm:p-8 relative max-h-[90vh] overflow-y-auto border border-cyan-500/30 shadow-2xl">
-                        <button onclick="closeDetailsModal()" class="absolute top-5 left-5 w-10 h-10 rounded-full bg-slate-800/80 hover:bg-rose-600/80 text-slate-300 hover:text-white flex items-center justify-center transition-all">
-                                <i class="fa-solid fa-xmark text-lg"></i>
-                        </button>
-                        
+                        <button type="button" onclick="closeDetailsModal()" class="absolute top-5 left-5 w-10 h-10 rounded-full bg-slate-800/80 hover:bg-rose-600/80 text-slate-300 hover:text-white flex items-center justify-center transition-all cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
                         <div class="flex items-center gap-4 mb-6 pb-4 border-b border-slate-700/60">
-                                <div class="w-12 h-12 rounded-xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400 text-xl">
-                                        <i class="fa-solid fa-laptop-code"></i>
-                                </div>
+                                <div class="w-12 h-12 rounded-xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400 text-xl"><i class="fa-solid fa-laptop-code"></i></div>
                                 <div>
-                                        <h3 id="modalDeviceTitle" class="text-xl font-bold text-cyan-300">تفاصيل الجهاز</h3>
-                                        <p id="modalDeviceSub" class="text-xs text-slate-400 mt-0.5">البطاقة الفنية الشاملة لمواصفات العتاد</p>
+                                        <h3 id="modalDeviceTitle" class="text-xl font-bold text-cyan-300">تفاصيل وتعديل مواصفات الجهاز</h3>
+                                        <p id="modalDeviceSub" class="text-xs text-slate-400 mt-0.5" data-i18n="modalDeviceSubText">البطاقة الفنية الشاملة لمواصفات العتاد</p>
                                 </div>
                         </div>
-
-                        <div id="modalSpecsGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        </div>
-
-                        <div class="mt-8 flex justify-end gap-3">
-                                <button onclick="closeDetailsModal()" class="px-5 py-2.5 rounded-xl bg-slate-700 hover:bg-slate-600 text-white font-medium transition-all">
-                                        إغلاق
-                                </button>
-                        </div>
+                        <form id="editSpecsForm" onsubmit="saveEditedDeviceSpecs(event)" class="space-y-4">
+                                <div id="modalSpecsGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+                                <div class="mt-8 flex justify-between items-center pt-4 border-t border-slate-700/60">
+                                        <button type="button" id="deleteDeviceFromDetailsBtn" onclick="openDeletePasswordPrompt()" class="px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold transition-all text-xs flex items-center gap-2 cursor-pointer shadow-lg">
+                                                <i class="fa-solid fa-trash-can"></i> <span data-i18n="delDeviceBtn">حذف هذا الجهاز</span>
+                                        </button>
+                                        <div class="flex gap-3">
+                                                <button type="button" onclick="closeDetailsModal()" class="px-5 py-2.5 rounded-xl bg-slate-700 hover:bg-slate-600 text-white font-medium transition-all text-xs cursor-pointer" data-i18n="closeBtn">إغلاق</button>
+                                                <button type="submit" id="saveSpecsBtn" class="px-6 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold transition-all text-xs cursor-pointer shadow-lg">
+                                                        <i class="fa-solid fa-floppy-disk"></i> <span data-i18n="saveSpecsBtnText">حفظ التعديلات</span>
+                                                </button>
+                                        </div>
+                                </div>
+                        </form>
                 </div>
         </div>
 
-        <!-- Password Modal -->
-        <div id="passwordModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm hidden p-4">
-                <div class="glass-panel w-full max-w-md rounded-3xl p-6 relative border border-cyan-500/30 shadow-2xl">
-                        <div class="text-center space-y-3 mb-6">
-                                <div class="w-16 h-16 rounded-2xl bg-amber-500/20 border border-amber-500/40 text-amber-400 flex items-center justify-center text-2xl mx-auto shadow-lg shadow-amber-500/10">
-                                        <i class="fa-solid fa-lock"></i>
-                                </div>
-                                <h3 class="text-xl font-bold text-amber-300">كلمة مرور التعديل مطلوبة</h3>
-                                <p class="text-xs text-slate-300">أدخل كلمة المرور ( الافتراضية: <span class="text-cyan-300 font-bold">groupit</span> )</p>
-                        </div>
-
-                        <div class="space-y-4">
-                                <input type="password" id="passwordInput" placeholder="أدخل كلمة المرور..."
-                                       class="w-full px-4 py-3 rounded-xl glass-input text-center text-lg tracking-widest">
-                                <div id="passwordError" class="text-xs text-rose-400 text-center font-bold hidden bg-rose-500/10 py-2 rounded-lg border border-rose-500/30">
-                                        <i class="fa-solid fa-triangle-exclamation"></i> كلمة المرور غير صحيحة! حاول مجدداً.
-                                </div>
-                        </div>
-
-                        <div class="mt-6 flex gap-3">
-                                <button id="submitPasswordBtn" class="flex-1 py-3 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold transition-all shadow-lg shadow-cyan-600/30">
-                                        تأكيد ودخول
-                                </button>
-                                <button id="cancelPasswordBtn" class="px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium transition-all">
-                                        إلغاء
-                                </button>
-                        </div>
-                </div>
-        </div>
-
-        <!-- Edit Modal -->
-        <div id="editModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm hidden p-4">
+        <div id="addDeviceModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm hidden p-4 no-print">
                 <div class="glass-panel w-full max-w-2xl rounded-3xl p-6 sm:p-8 relative max-h-[90vh] overflow-y-auto border border-cyan-500/30 shadow-2xl">
                         <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-700/60">
-                                <h3 class="text-xl font-bold text-cyan-300 flex items-center gap-2">
-                                        <i class="fa-solid fa-pen-to-square"></i> تعديل بيانات السجل
-                                </h3>
-                                <button onclick="closeEditModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+                                <h3 class="text-xl font-bold text-cyan-300 flex items-center gap-2"><i class="fa-solid fa-circle-plus"></i> <span data-i18n="addModalTitle">إضافة جهاز جديد إلى النظام</span></h3>
+                                <button type="button" onclick="closeAddDeviceModal()" class="text-slate-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark text-xl"></i></button>
                         </div>
-                        <form id="editForm" onsubmit="saveEditedRecord(event)" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <form id="addDeviceForm" onsubmit="saveNewDevice(event)" class="space-y-4">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div>
+                                                <label class="text-xs text-cyan-300 font-semibold mb-1.5 block" data-i18n="techNameLabel">اسم المسؤول الفني</label>
+                                                <input type="text" id="addTechnicianInput" required placeholder="أدخل اسم الفني المسؤول..." class="w-full px-3.5 py-2.5 rounded-xl glass-input text-sm" data-i18n-placeholder="techInputPlaceholder">
+                                        </div>
+                                        <div>
+                                                <label class="text-xs text-cyan-300 font-semibold mb-1.5 block" data-i18n="deviceNameLabel">اسم الجهاز / الموظف</label>
+                                                <input type="text" id="addDeviceNameInput" required placeholder="أدخل اسم الجهاز أو الموظف..." class="w-full px-3.5 py-2.5 rounded-xl glass-input text-sm" data-i18n-placeholder="deviceNamePlaceholder">
+                                        </div>
+                                        <div>
+                                                <label class="text-xs text-cyan-300 font-semibold mb-1.5 block" data-i18n="deptSelectLabel">القسم (Department)</label>
+                                                <input type="text" id="addDeviceDeptInput" required placeholder="اختر أو اكتب اسم القسم..." list="existingDeptsList" class="w-full px-3.5 py-2.5 rounded-xl glass-input text-sm" data-i18n-placeholder="deptInputPlaceholder">
+                                                <datalist id="existingDeptsList"></datalist>
+                                        </div>
+                                        <div>
+                                                <label class="text-xs text-cyan-300 font-semibold mb-1.5 block" data-i18n="ipAddressLabel">عنوان IP</label>
+                                                <input type="text" id="addDeviceIpInput" placeholder="مثال: 192.168.1.50" class="w-full px-3.5 py-2.5 rounded-xl glass-input text-sm" data-i18n-placeholder="ipPlaceholder">
+                                        </div>
+                                </div>
+                                <div id="addDeviceExtraFieldsContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2"></div>
+                                <div class="mt-8 flex justify-end gap-3 pt-4 border-t border-slate-700/60">
+                                        <button type="button" onclick="closeAddDeviceModal()" class="px-5 py-2.5 rounded-xl bg-slate-700 hover:bg-slate-600 text-white font-medium text-xs cursor-pointer" data-i18n="closeBtn">إغلاق</button>
+                                        <button type="submit" class="px-6 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold shadow-lg text-xs cursor-pointer" data-i18n="saveDeviceBtn">حفظ الجهاز الجديد</button>
+                                </div>
                         </form>
-                        <div class="mt-8 flex justify-end gap-3 pt-4 border-t border-slate-700/60">
-                                <button type="button" onclick="closeEditModal()" class="px-5 py-2.5 rounded-xl bg-slate-700 hover:bg-slate-600 text-white font-medium">إغلاق</button>
-                                <button type="submit" form="editForm" class="px-6 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold shadow-lg shadow-cyan-600/30">حفظ التعديلات</button>
-                        </div>
                 </div>
         </div>
 
-        <!-- Maintenance Modal -->
-        <div id="maintenanceModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm hidden p-4">
+        <div id="maintenanceModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm hidden p-4 no-print">
                 <div class="glass-panel w-full max-w-lg rounded-3xl p-6 sm:p-8 relative border border-amber-500/30 shadow-2xl">
                         <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-700/60">
-                                <h3 class="text-xl font-bold text-amber-300 flex items-center gap-2">
-                                        <i class="fa-solid fa-screwdriver-wrench"></i> تسجيل مهمة صيانة جديدة
-                                </h3>
-                                <button onclick="closeMaintenanceModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+                                <h3 class="text-xl font-bold text-amber-300 flex items-center gap-2"><i class="fa-solid fa-screwdriver-wrench"></i> <span data-i18n="maintModalTitle">تسجيل مهمة صيانة جديدة</span></h3>
+                                <button type="button" onclick="closeMaintenanceModal()" class="text-slate-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark text-xl"></i></button>
                         </div>
                         <form id="maintenanceForm" onsubmit="saveMaintenanceTask(event)" class="space-y-4">
                                 <div class="flex flex-col gap-1.5">
-                                        <label class="text-xs text-amber-300 font-semibold">اختر اسم الكمبيوتر (الجهاز)</label>
-                                        <select id="maintDeviceSelect" onchange="onMaintenanceDeviceSelected(this.value)" required
-                                                class="px-3.5 py-2.5 rounded-xl glass-input text-sm">
-                                                <option value="">-- اختر جهازاً من القائمة --</option>
+                                        <label class="text-xs text-amber-300 font-semibold" data-i18n="techNameLabel">اسم المسؤول الفني</label>
+                                        <input type="text" id="maintTechnicianInput" required placeholder="أدخل اسم الفني المسؤول..." class="px-3.5 py-2.5 rounded-xl glass-input text-sm" data-i18n-placeholder="techInputPlaceholder">
+                                </div>
+                                <div class="flex flex-col gap-1.5">
+                                        <label class="text-xs text-amber-300 font-semibold" data-i18n="selectDeviceLabel">اختر اسم الكمبيوتر (الجهاز)</label>
+                                        <select id="maintDeviceSelect" onchange="onMaintenanceDeviceSelected(this.value)" required class="px-3.5 py-2.5 rounded-xl glass-input text-sm cursor-pointer">
+                                                <option value="" data-i18n="selectDeviceDefault">-- اختر جهازاً من القائمة --</option>
                                         </select>
                                 </div>
                                 <div class="flex justify-between items-center bg-slate-800/40 p-3 rounded-xl border border-slate-700/50">
-                                        <span class="text-xs text-slate-300">تريد تعديل مواصفات هذا الجهاز؟</span>
-                                        <button type="button" onclick="openEditSelectedDeviceSpecs()" id="editDeviceSpecsBtn" disabled
-                                                class="px-3 py-1.5 rounded-lg bg-cyan-600/50 text-slate-400 text-xs font-bold transition-all">
-                                                <i class="fa-solid fa-pen"></i> تعديل المواصفات الفنية
+                                        <span class="text-xs text-slate-300" data-i18n="wantEditSpecs">تريد تعديل مواصفات هذا الجهاز؟</span>
+                                        <button type="button" onclick="openEditSelectedDeviceSpecs()" id="editDeviceSpecsBtn" disabled class="px-3 py-1.5 rounded-lg bg-cyan-600/50 text-slate-400 text-xs font-bold transition-all">
+                                                <i class="fa-solid fa-pen"></i> <span data-i18n="editSpecsBtn">تعديل المواصفات الفنية</span>
                                         </button>
                                 </div>
                                 <div class="flex flex-col gap-1.5">
-                                        <label class="text-xs text-amber-300 font-semibold">العمل المنجز / الملاحظات (جدول الملاحظات)</label>
-                                        <textarea id="maintNotes" required rows="4" placeholder="اكتب تفاصيل العمل أو التعديل الذي قمت به..."
-                                                  class="px-3.5 py-2.5 rounded-xl glass-input text-sm resize-none"></textarea>
+                                        <label class="text-xs text-amber-300 font-semibold flex items-center gap-1.5"><i class="fa-solid fa-calendar-days text-amber-400"></i> <span data-i18n="maintDateLabel">تاريخ الصيانة</span></label>
+                                        <input type="date" id="maintDateInput" required class="px-3.5 py-2.5 rounded-xl glass-input text-sm cursor-pointer">
+                                </div>
+                                <div class="flex flex-col gap-1.5">
+                                        <label class="text-xs text-amber-300 font-semibold" data-i18n="maintNotesLabel">أعمال الصيانة التي جرت</label>
+                                        <textarea id="maintNotes" required rows="4" placeholder="اكتب تفاصيل أعمال الصيانة..." class="px-3.5 py-2.5 rounded-xl glass-input text-sm resize-none" data-i18n-placeholder="maintNotesPlaceholder"></textarea>
                                 </div>
                                 <div class="mt-8 flex justify-end gap-3 pt-4 border-t border-slate-700/60">
-                                        <button type="button" onclick="closeMaintenanceModal()" class="px-5 py-2.5 rounded-xl bg-slate-700 hover:bg-slate-600 text-white font-medium">إغلاق</button>
-                                        <button type="submit" class="px-6 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold shadow-lg shadow-amber-600/30">حفظ المهمة</button>
+                                        <button type="button" onclick="closeMaintenanceModal()" class="px-5 py-2.5 rounded-xl bg-slate-700 hover:bg-slate-600 text-white font-medium text-xs cursor-pointer" data-i18n="closeBtn">إغلاق</button>
+                                        <button type="submit" class="px-6 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold shadow-lg text-xs cursor-pointer" data-i18n="saveTaskBtn">حفظ المهمة</button>
                                 </div>
                         </form>
                 </div>
         </div>
 
-        <!-- Maintenance Report Modal -->
-        <div id="maintenanceReportModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm hidden p-4">
-                <div class="glass-panel w-full max-w-5xl rounded-3xl p-6 sm:p-8 relative max-h-[90vh] overflow-y-auto border border-indigo-500/30 shadow-2xl">
-                        <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-700/60">
-                                <h3 class="text-xl font-bold text-indigo-300 flex items-center gap-2">
-                                        <i class="fa-solid fa-clipboard-list"></i> تقرير أعمال الصيانة الشامل
-                                </h3>
-                                <button onclick="closeMaintenanceReportModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
-                        </div>
-
-                        <!-- Date Filter Toolbar with Calendar Pickers -->
-                        <div class="flex flex-wrap items-center gap-4 mb-6 bg-slate-800/50 p-4 rounded-xl border border-slate-700/50">
+        <div id="maintenanceReportModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm hidden p-2 sm:p-4 overflow-y-auto">
+                <div class="glass-panel w-full max-w-5xl rounded-3xl p-6 sm:p-10 relative max-h-[95vh] overflow-y-auto border border-indigo-500/30 shadow-2xl">
+                        <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-700/60 no-print">
+                                <h3 class="text-xl font-bold text-indigo-300 flex items-center gap-2"><i class="fa-solid fa-clipboard-list"></i> <span data-i18n="reportModalTitle">نموذج تقرير أعمال الصيانة الشامل</span></h3>
                                 <div class="flex items-center gap-2">
-                                        <label class="text-xs text-slate-300 flex items-center gap-1.5"><i class="fa-solid fa-calendar-days text-indigo-400"></i> من تاريخ:</label>
-                                        <input type="date" id="filterDateFrom" onchange="renderMaintenanceReportTable()"
-                                               class="px-3.5 py-2 rounded-xl glass-input text-xs cursor-pointer">
+                                        <button type="button" onclick="printReport()" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold flex items-center gap-2 transition-all shadow-lg cursor-pointer"><i class="fa-solid fa-print"></i> <span data-i18n="printReportBtn">طباعة التقرير</span></button>
+                                        <button type="button" onclick="closeMaintenanceReportModal()" class="w-9 h-9 rounded-full bg-slate-800 hover:bg-rose-600 text-slate-300 hover:text-white flex items-center justify-center transition-all cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
+                                </div>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-3 mb-6 bg-slate-800/50 p-4 rounded-xl border border-slate-700/50 no-print">
+                                <div class="flex items-center gap-2">
+                                        <label class="text-xs text-slate-300 flex items-center gap-1.5"><i class="fa-solid fa-calendar-days text-indigo-400"></i> <span data-i18n="fromDateLabel">من تاريخ:</span></label>
+                                        <input type="date" id="filterDateFrom" class="px-3.5 py-2 rounded-xl glass-input text-xs cursor-pointer">
                                 </div>
                                 <div class="flex items-center gap-2">
-                                        <label class="text-xs text-slate-300 flex items-center gap-1.5"><i class="fa-solid fa-calendar-days text-indigo-400"></i> إلى تاريخ:</label>
-                                        <input type="date" id="filterDateTo" onchange="renderMaintenanceReportTable()"
-                                               class="px-3.5 py-2 rounded-xl glass-input text-xs cursor-pointer">
+                                        <label class="text-xs text-slate-300 flex items-center gap-1.5"><i class="fa-solid fa-calendar-days text-indigo-400"></i> <span data-i18n="toDateLabel">إلى تاريخ:</span></label>
+                                        <input type="date" id="filterDateTo" class="px-3.5 py-2 rounded-xl glass-input text-xs cursor-pointer">
                                 </div>
-                                <button onclick="resetDateFilter()" class="px-3.5 py-2 rounded-xl bg-slate-700 hover:bg-slate-600 text-white text-xs font-medium flex items-center gap-1.5 transition-all">
-                                        <i class="fa-solid fa-rotate-right"></i> إلغاء التصفية
-                                </button>
+                                <button type="button" onclick="renderMaintenanceReportTable()" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold flex items-center gap-1.5 transition-all shadow-lg cursor-pointer"><i class="fa-solid fa-check"></i> <span data-i18n="filterBtn">تصفية</span></button>
+                                <button type="button" onclick="resetDateFilter()" class="px-3.5 py-2 rounded-xl bg-slate-700 hover:bg-slate-600 text-white text-xs font-medium flex items-center gap-1.5 transition-all cursor-pointer"><i class="fa-solid fa-rotate-right"></i> <span data-i18n="showAllBtn">عرض الكل</span></button>
                         </div>
-                        
-                        <div class="overflow-x-auto rounded-xl border border-slate-700/50">
+                        <div class="overflow-x-auto rounded-xl border border-slate-700/50 bg-white/5">
                                 <table class="w-full text-right border-collapse">
                                         <thead>
-                                                <tr class="bg-slate-800/90 text-indigo-300 text-xs uppercase tracking-wider border-b border-slate-700">
-                                                        <th class="p-3.5 px-4 font-semibold">اسم الكمبيوتر</th>
-                                                        <th class="p-3.5 px-4 font-semibold">جدول الملاحظات (العمل المنجز)</th>
-                                                        <th class="p-3.5 px-4 font-semibold">تاريخ ووقت الصيانة</th>
-                                                        <th class="p-3.5 text-center font-semibold">إجراء</th>
+                                                <tr>
+                                                        <th colspan="5" class="p-0 border-none bg-transparent">
+                                                                <div class="text-center pb-4 mb-3 border-b-2 border-slate-600">
+                                                                        <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-wide" data-i18n="printHeader1">نظام إدارة الأجهزة ومهام الصيانة التقنية</h2>
+                                                                        <p class="text-sm font-bold text-indigo-600 dark:text-indigo-400 mt-1" data-i18n="printHeader2">تقرير أعمال الصيانة الشامل وتعديلات الأجهزة</p>
+                                                                </div>
+                                                        </th>
+                                                </tr>
+                                                <tr class="bg-slate-800 text-indigo-300 text-xs uppercase tracking-wider border-b border-slate-700">
+                                                        <th class="p-3.5 px-4 font-semibold w-16 text-center" data-i18n="thSerial">مسلسل</th>
+                                                        <th class="p-3.5 px-4 font-semibold w-1/4" data-i18n="thTech">اسم المسؤول الفني</th>
+                                                        <th class="p-3.5 px-4 font-semibold w-1/2" data-i18n="thActionsNotes">أعمال الصيانة التي جرت</th>
+                                                        <th class="p-3.5 px-4 font-semibold w-32" data-i18n="thDate">التاريخ</th>
+                                                        <th id="reportActionHeader" class="p-3.5 text-center font-semibold no-print w-16" data-i18n="thAction">إجراء</th>
                                                 </tr>
                                         </thead>
                                         <tbody id="maintenanceReportTableBody" class="divide-y divide-slate-800/60 text-sm">
-                                                <tr><td colspan="4" class="text-center py-12 text-slate-400">لا توجد سجلات صيانة مسجلة حتى الآن</td></tr>
+                                                <tr><td colspan="5" class="text-center py-12 text-slate-400" data-i18n="loadingMsg">جاري تحميل السجلات...</td></tr>
                                         </tbody>
                                 </table>
                         </div>
-
-                        <div class="mt-6 flex justify-end">
-                                <button onclick="closeMaintenanceReportModal()" class="px-5 py-2.5 rounded-xl bg-slate-700 hover:bg-slate-600 text-white font-medium">إغلاق التقرير</button>
+                        <div class="mt-6 flex justify-end no-print">
+                                <button type="button" onclick="closeMaintenanceReportModal()" class="px-5 py-2.5 rounded-xl bg-slate-700 hover:bg-slate-600 text-white font-medium text-xs cursor-pointer" data-i18n="closeReportBtn">إغلاق التقرير</button>
                         </div>
                 </div>
         </div>
 
-        <!-- Application JavaScript -->
         <script>
-                let appData = {};
-                let maintenanceData = [];
-                let workbookGlobal = null;
-                let currentSheet = "";
-                let searchQuery = "";
-                let departmentChart = null;
-                let pendingEditIndex = null;
-                let selectedDeviceReference = null; // {sheetName, index}
+                let appData = {}, maintenanceData = [], workbookGlobal = null, currentSheet = "", searchQuery = "", departmentChart = null, selectedDeviceReference = null, currentActiveDetailsRef = null, currentUserRole = "viewer", currentLang = "ar", isDarkMode = true, currentAdminPassword = "groupit";
 
-                document.addEventListener("DOMContentLoaded", () => {
-                    const submitBtn = document.getElementById('submitPasswordBtn');
-                    const cancelBtn = document.getElementById('cancelPasswordBtn');
-                    const pwdInput = document.getElementById('passwordInput');
-                    if (submitBtn) submitBtn.addEventListener('click', verifyPassword);
-                    if (cancelBtn) cancelBtn.addEventListener('click', closePasswordModal);
-                    if (pwdInput) {
-                        pwdInput.addEventListener('keydown', (e) => {
-                            if (e.key === 'Enter') verifyPassword();
-                        });
-                    }
-                });
+                const translations = {
+                        ar: {
+                                pageTitle: "نظام إدارة الأجهزة ومهمات الصيانة التقنية", loginTitle: "تسجيل الدخول للنظام", loginSub: "اختر نمط الاستخدام للمتابعة", viewerRole: "يوزر مستعرض (بدون كلمة سر)", viewerDesc: "استعراض مواصفات الأجهزة والتقارير دون تعديل أو إضافة", adminRole: "يوزر مدير (Admin)", adminDesc: "صلاحيات كاملة لإضافة، تعديل، وحذف الأجهزة والصيانة", adminPassTitle: "تحقق صلاحيات المدير", adminPassSub: "الرجاء إدخال كلمة المرور للمتابعة", passwordPlaceholder: "كلمة المرور...", cancelBtn: "إلغاء", loginBtn: "دخول", delModalTitle: "تأكيد حذف الجهاز", delModalSub: "أدخل كلمة المرور للتأكيد:", confirmDelBtn: "تأكيد الحذف", mainHeaderTitle: "نظام إدارة الأجهزة ومهمات الصيانة", mainHeaderSub: "إدارة ملفات الإكسل وسجلات صيانة الأجهزة", addDeviceBtnText: "إضافة جهاز جديد", maintBtnText: "تسجيل صيانة جديدة", reportBtnText: "تقرير الصيانة الشامل", uploadBtnText: "رفع إكسل", exportBtnText: "تصدير", langLabel: "لغة الموقع (Language)", darkModeLabel: "الوضع المظلم (Dark Mode)", changePassMenuBtn: "تغيير كلمة المرور", changePassModalTitle: "تغيير كلمة المرور", changePassModalSub: "أدخل كلمة المرور القديمة والجديدة", oldPassPlaceholder: "كلمة المرور القديمة...", newPassPlaceholder: "كلمة المرور الجديدة...", savePassBtn: "حفظ", deptStatsTitle: "إحصائيات الأقسام", deptStatsSub: "توزيع الأجهزة حسب القسم الحالي", deviceWord: "جهاز", searchPlaceholder: "ابحث في السجلات...", tableTip: "انقر على اسم الموظف أو الجهاز", emptyTableMsg: "يرجى رفع ملف إكسل أو إضافة جهاز جديد للبدء", delDeviceBtn: "حذف هذا الجهاز", closeBtn: "إغلاق", addModalTitle: "إضافة جهاز جديد إلى النظام", techNameLabel: "اسم المسؤول الفني", techInputPlaceholder: "أدخل اسم الفني المسؤول...", deviceNameLabel: "اسم الجهاز / الموظف", deviceNamePlaceholder: "أدخل اسم الجهاز أو الموظف...", deptSelectLabel: "القسم (Department)", deptInputPlaceholder: "اختر أو اكتب اسم القسم...", ipAddressLabel: "عنوان IP", ipPlaceholder: "مثال: 192.168.1.50", saveDeviceBtn: "حفظ الجهاز الجديد", maintModalTitle: "تسجيل مهمة صيانة جديدة", selectDeviceLabel: "اختر اسم الكمبيوتر (الجهاز)", selectDeviceDefault: "-- اختر جهازاً من القائمة --", wantEditSpecs: "تريد تعديل مواصفات هذا الجهاز؟", editSpecsBtn: "تعديل المواصفات الفنية", maintDateLabel: "تاريخ الصيانة", maintNotesLabel: "أعمال الصيانة التي جرت", maintNotesPlaceholder: "اكتب تفاصيل أعمال الصيانة...", saveTaskBtn: "حفظ المهمة", reportModalTitle: "نموذج تقرير أعمال الصيانة الشامل", printReportBtn: "طباعة التقرير", fromDateLabel: "من تاريخ:", toDateLabel: "إلى تاريخ:", filterBtn: "تصفية", showAllBtn: "عرض الكل", printHeader1: "نظام إدارة الأجهزة ومهام الصيانة التقنية", printHeader2: "تقرير أعمال الصيانة الشامل وتعديلات الأجهزة", thSerial: "مسلسل", thTech: "اسم المسؤول الفني", thActionsNotes: "أعمال الصيانة التي جرت", thDate: "التاريخ", thAction: "إجراء", closeReportBtn: "إغلاق التقرير", loadingMsg: "جاري تحميل السجلات...", modalDeviceSubText: "البطاقة الفنية الشاملة لمواصفات العتاد", roleAdminBadge: "صلاحية: مدير النظام", roleViewerBadge: "صلاحية: مستعرض", successAlert: "✅ تم بنجاح!", saveSpecsBtnText: "حفظ التعديلات", sheet1Name: "الطابق الثالث والرابع", sheet2Name: "القبو", sheet3Name: "الصالة"
+                        },
+                        en: {
+                                pageTitle: "Devices Management & Technical Maintenance System", loginTitle: "System Login", loginSub: "Choose usage mode to continue", viewerRole: "Viewer User (No Password)", viewerDesc: "Browse device specs and reports without modification", adminRole: "Admin User", adminDesc: "Full privileges to add, edit, and delete devices/maintenance", adminPassTitle: "Admin Verification", adminPassSub: "Please enter password to continue", passwordPlaceholder: "Password...", cancelBtn: "Cancel", loginBtn: "Login", delModalTitle: "Confirm Device Deletion", delModalSub: "Enter password to confirm:", confirmDelBtn: "Confirm Delete", mainHeaderTitle: "Devices & Maintenance Management", mainHeaderSub: "Manage Excel sheets and maintenance logs", addDeviceBtnText: "Add New Device", maintBtnText: "Log Maintenance", reportBtnText: "Maintenance Report", uploadBtnText: "Upload Excel", exportBtnText: "Export", langLabel: "Language", darkModeLabel: "Dark Mode", changePassMenuBtn: "Change Password", changePassModalTitle: "Change Password", changePassModalSub: "Enter old and new password", oldPassPlaceholder: "Old Password...", newPassPlaceholder: "New Password...", savePassBtn: "Save", deptStatsTitle: "Department Stats", deptStatsSub: "Device distribution by current dept", deviceWord: "device", searchPlaceholder: "Search records...", tableTip: "Click employee or device name", emptyTableMsg: "Please upload an Excel file or add a device to start", delDeviceBtn: "Delete Device", closeBtn: "Close", addModalTitle: "Add New Device to System", techNameLabel: "Technician Name", techInputPlaceholder: "Enter technician name...", deviceNameLabel: "Device / Employee Name", deviceNamePlaceholder: "Enter device name...", deptSelectLabel: "Department", deptInputPlaceholder: "Select or type department...", ipAddressLabel: "IP Address", ipPlaceholder: "e.g. 192.168.1.50", saveDeviceBtn: "Save New Device", maintModalTitle: "Log New Maintenance Task", selectDeviceLabel: "Select Computer (Device)", selectDeviceDefault: "-- Choose a device --", wantEditSpecs: "Want to edit this device specs?", editSpecsBtn: "Edit Specs", maintDateLabel: "Maintenance Date", maintNotesLabel: "Maintenance Work Done", maintNotesPlaceholder: "Type maintenance details...", saveTaskBtn: "Save Task", reportModalTitle: "Comprehensive Maintenance Report", printReportBtn: "Print Report", fromDateLabel: "From Date:", toDateLabel: "To Date:", filterBtn: "Filter", showAllBtn: "Show All", printHeader1: "Devices & Technical Maintenance Management System", printHeader2: "Comprehensive Maintenance & Updates Report", thSerial: "No.", thTech: "Technician Name", thActionsNotes: "Maintenance / Updates", thDate: "Date", thAction: "Action", closeReportBtn: "Close Report", loadingMsg: "Loading records...", modalDeviceSubText: "Comprehensive hardware specification card", roleAdminBadge: "Role: Admin", roleViewerBadge: "Role: Viewer", successAlert: "✅ Success!", saveSpecsBtnText: "Save Changes", sheet1Name: "3rd and 4th Floor", sheet2Name: "Basement", sheet3Name: "Hall"
+                        }
+                };
+
+                const fixedKeysAr = ["الطابق الثالث والرابع", "القبو", "الصالة"];
+                const fixedKeysEn = ["3rd and 4th Floor", "Basement", "Hall"];
 
                 function initApp() {
+                        const savedPass = localStorage.getItem('app_admin_password');
+                        if (savedPass) currentAdminPassword = savedPass;
+                        const savedLang = localStorage.getItem('app_current_lang');
+                        if (savedLang) { currentLang = savedLang; document.getElementById('langSelect').value = currentLang; }
                         const saved = localStorage.getItem('excel_dynamic_app_data');
-                        if (saved) {
-                                try {
-                                        appData = JSON.parse(saved);
-                                        const sheets = Object.keys(appData);
-                                        if (sheets.length > 0) {
-                                                currentSheet = sheets[0];
-                                                renderTabs();
-                                                renderDashboard();
-                                        }
-                                } catch(e) {
-                                        console.error(e);
-                                }
+                        if (saved) { try { appData = JSON.parse(saved); } catch(e) { console.error(e); } }
+
+                        let currentKeys = Object.keys(appData), targetKeys = currentLang === 'en' ? fixedKeysEn : fixedKeysAr;
+                        if (currentKeys.length !== 3) {
+                                let newAppData = {};
+                                newAppData[targetKeys[0]] = currentKeys[0] ? (appData[currentKeys[0]] || []) : [];
+                                newAppData[targetKeys[1]] = currentKeys[1] ? (appData[currentKeys[1]] || []) : [];
+                                newAppData[targetKeys[2]] = currentKeys[2] ? (appData[currentKeys[2]] || []) : [];
+                                appData = newAppData;
+                        } else {
+                                let oldAppData = appData;
+                                appData = {};
+                                appData[targetKeys[0]] = oldAppData[currentKeys[0]] || [];
+                                appData[targetKeys[1]] = oldAppData[currentKeys[1]] || [];
+                                appData[targetKeys[2]] = oldAppData[currentKeys[2]] || [];
                         }
+                        saveDataToStorage();
+
+                        const sheets = Object.keys(appData);
+                        if (sheets.length > 0 && (!currentSheet || !appData[currentSheet])) currentSheet = sheets[0];
+
                         const savedMaint = localStorage.getItem('maintenance_tasks_data');
-                        if (savedMaint) {
-                                try {
-                                        maintenanceData = JSON.parse(savedMaint);
-                                } catch(e) {
-                                        console.error(e);
-                                }
+                        if (savedMaint) { try { maintenanceData = JSON.parse(savedMaint); } catch(e) { console.error(e); } }
+
+                        const savedRole = localStorage.getItem('app_current_user_role');
+                        if (savedRole) { currentUserRole = savedRole; applyUserRolePermissions(); }
+                        else { document.getElementById('loginModal').classList.remove('hidden'); }
+
+                        applyLanguage();
+                        const savedDark = localStorage.getItem('app_dark_mode');
+                        if (savedDark !== null) { isDarkMode = savedDark === 'true'; document.getElementById('darkModeCheckbox').checked = isDarkMode; }
+                        applyTheme();
+                        renderTabs();
+                        renderDashboard();
+                }
+
+                function toggleSettingsDropdown() { document.getElementById('settingsDropdown').classList.toggle('hidden'); }
+
+                function changeLanguage(lang) {
+                        const sheets = Object.keys(appData);
+                        let oldActiveIndex = sheets.indexOf(currentSheet);
+                        if (oldActiveIndex === -1) oldActiveIndex = 0;
+                        let fromKeys = currentLang === 'en' ? fixedKeysEn : fixedKeysAr, toKeys = lang === 'en' ? fixedKeysEn : fixedKeysAr;
+                        let oldAppData = appData;
+                        appData = {};
+                        fromKeys.forEach((oldKey, idx) => { appData[toKeys[idx]] = oldAppData[oldKey] || []; });
+                        currentSheet = toKeys[oldActiveIndex];
+                        currentLang = lang;
+                        localStorage.setItem('app_current_lang', lang);
+                        saveDataToStorage();
+                        applyLanguage();
+                        renderTabs();
+                        if (Object.keys(appData).length > 0) renderDashboard();
+                }
+
+                function applyLanguage() {
+                        const root = document.getElementById('htmlRoot');
+                        root.setAttribute('lang', currentLang);
+                        root.setAttribute('dir', 'rtl');
+                        const dict = translations[currentLang];
+                        document.querySelectorAll('[data-i18n]').forEach(el => { const key = el.getAttribute('data-i18n'); if (dict[key]) el.textContent = dict[key]; });
+                        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { const key = el.getAttribute('data-i18n-placeholder'); if (dict[key]) el.placeholder = dict[key]; });
+                        applyUserRolePermissions();
+                }
+
+                function toggleDarkMode(checked) { isDarkMode = checked; localStorage.setItem('app_dark_mode', isDarkMode); applyTheme(); }
+
+                function applyTheme() {
+                        const body = document.body;
+                        if (isDarkMode) body.className = body.className.replace('light-mode', '') + ' dark-mode';
+                        else body.className = body.className.replace('dark-mode', '') + ' light-mode';
+                }
+
+                function selectUserRole(role) { currentUserRole = role; localStorage.setItem('app_current_user_role', role); document.getElementById('loginModal').classList.add('hidden'); applyUserRolePermissions(); }
+                function openAdminPasswordPrompt() { document.getElementById('adminPasswordInput').value = ''; document.getElementById('adminPasswordModal').classList.remove('hidden'); setTimeout(() => document.getElementById('adminPasswordInput').focus(), 100); }
+                function closeAdminPasswordPrompt() { document.getElementById('adminPasswordModal').classList.add('hidden'); }
+
+                function verifyAdminPassword(e) {
+                        e.preventDefault();
+                        const pass = document.getElementById('adminPasswordInput').value;
+                        if (pass.trim() !== currentAdminPassword) { 
+                                alert(currentLang === 'ar' ? '❌ كلمة المرور غير صحيحة!' : '❌ Incorrect password!'); 
+                                document.getElementById('adminPasswordInput').value = ''; 
+                                document.getElementById('adminPasswordInput').focus(); 
+                                return; 
+                        }
+                        closeAdminPasswordPrompt();
+                        selectUserRole('admin');
+                }
+
+                function openChangePasswordModal() { toggleSettingsDropdown(); document.getElementById('oldPasswordInput').value = ''; document.getElementById('newPasswordInput').value = ''; document.getElementById('changePasswordModal').classList.remove('hidden'); setTimeout(() => document.getElementById('oldPasswordInput').focus(), 100); }
+                function closeChangePasswordModal() { document.getElementById('changePasswordModal').classList.add('hidden'); }
+
+                function saveNewAdminPassword(e) {
+                        e.preventDefault();
+                        const oldPass = document.getElementById('oldPasswordInput').value, newPass = document.getElementById('newPasswordInput').value;
+                        if (oldPass.trim() !== currentAdminPassword) { alert(currentLang === 'ar' ? '❌ كلمة المرور القديمة غير صحيحة!' : '❌ Incorrect old password!'); document.getElementById('oldPasswordInput').value = ''; document.getElementById('oldPasswordInput').focus(); return; }
+                        if (!newPass.trim()) { alert(currentLang === 'ar' ? '⚠️ يرجى إدخال كلمة المرور الجديدة.' : '⚠️ Please enter new password.'); return; }
+                        currentAdminPassword = newPass.trim();
+                        localStorage.setItem('app_admin_password', currentAdminPassword);
+                        closeChangePasswordModal();
+                        alert(currentLang === 'ar' ? '✅ تم تحديث كلمة المرور بنجاح!' : '✅ Password updated successfully!');
+                }
+
+                function openDeletePasswordPrompt() {
+                        if (currentUserRole !== 'admin') { alert(currentLang === 'ar' ? '⚠️ عذراً، حساب المستعرض لا يملك صلاحية الحذف.' : '⚠️ Viewer cannot delete.'); return; }
+                        closeDetailsModal();
+                        document.getElementById('deletePasswordInput').value = '';
+                        document.getElementById('deletePasswordModal').classList.remove('hidden');
+                        setTimeout(() => document.getElementById('deletePasswordInput').focus(), 100);
+                }
+
+                function closeDeletePasswordPrompt() { document.getElementById('deletePasswordModal').classList.add('hidden'); }
+
+                function confirmDeleteDevice(e) {
+                        e.preventDefault();
+                        const pass = document.getElementById('deletePasswordInput').value;
+                        if (pass.trim() !== currentAdminPassword) { alert(currentLang === 'ar' ? '❌ كلمة المرور غير صحيحة!' : '❌ Incorrect password!'); document.getElementById('deletePasswordInput').value = ''; document.getElementById('deletePasswordInput').focus(); return; }
+                        closeDeletePasswordPrompt();
+                        if (!currentActiveDetailsRef) return;
+                        const { sheetName, index } = currentActiveDetailsRef;
+                        const row = appData[sheetName][index], keysArr = Object.keys(row);
+                        const devName = row[keysArr[2]] || row[keysArr[1]] || 'Device';
+                        appData[sheetName].splice(index, 1);
+                        const today = new Date(), dateStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+                        maintenanceData.unshift({ id: Date.now(), technicianName: "مدير النظام (Admin)", deviceName: devName + " (Deleted)", editBlocks: [{ field: "Status", val: "Device deleted permanently" }], isEdit: true, datetime: dateStr, dateOnly: dateStr, sheetName: sheetName, index: index });
+                        saveDataToStorage();
+                        renderTabs();
+                        renderDashboard();
+                        alert(currentLang === 'ar' ? '🗑️ تم حذف الجهاز بنجاح.' : '🗑️ Device deleted successfully.');
+                }
+
+                function switchUserRole() { document.getElementById('loginModal').classList.remove('hidden'); }
+
+                function applyUserRolePermissions() {
+                        const badge = document.getElementById('userRoleBadge'), addDeviceBtn = document.getElementById('addDeviceBtn'), maintBtn = document.getElementById('maintBtn'), uploadLabel = document.getElementById('uploadExcelLabel'), deleteDetailsBtn = document.getElementById('deleteDeviceFromDetailsBtn'), saveSpecsBtn = document.getElementById('saveSpecsBtn'), changePassMenuOption = document.getElementById('changePasswordMenuOption'), dict = translations[currentLang];
+                        if (currentUserRole === 'admin') {
+                                badge.textContent = dict.roleAdminBadge; badge.className = "px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/25 text-amber-300 border border-amber-500/40";
+                                if (addDeviceBtn) addDeviceBtn.style.display = 'flex'; if (maintBtn) maintBtn.style.display = 'flex'; if (uploadLabel) uploadLabel.style.display = 'flex'; if (deleteDetailsBtn) deleteDetailsBtn.style.display = 'inline-flex'; if (saveSpecsBtn) saveSpecsBtn.style.display = 'inline-flex'; if (changePassMenuOption) changePassMenuOption.style.display = 'block';
+                        } else {
+                                badge.textContent = dict.roleViewerBadge; badge.className = "px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-cyan-500/25 text-cyan-300 border border-cyan-500/40";
+                                if (addDeviceBtn) addDeviceBtn.style.display = 'none'; if (maintBtn) maintBtn.style.display = 'none'; if (uploadLabel) uploadLabel.style.display = 'none'; if (deleteDetailsBtn) deleteDetailsBtn.style.display = 'none'; if (saveSpecsBtn) saveSpecsBtn.style.display = 'none'; if (changePassMenuOption) changePassMenuOption.style.display = 'none';
                         }
                 }
 
-                function saveDataToStorage() {
-                        localStorage.setItem('excel_dynamic_app_data', JSON.stringify(appData));
-                        localStorage.setItem('maintenance_tasks_data', JSON.stringify(maintenanceData));
-                }
+                function saveDataToStorage() { localStorage.setItem('excel_dynamic_app_data', JSON.stringify(appData)); localStorage.setItem('maintenance_tasks_data', JSON.stringify(maintenanceData)); }
 
                 function handleFile(e) {
-                        const file = e.target.files[0];
-                        if (!file) return;
+                        if (currentUserRole !== 'admin') return;
+                        const file = e.target.files[0]; if (!file) return;
                         const reader = new FileReader();
                         reader.onload = function(evt) {
                                 try {
-                                        const data = new Uint8Array(evt.target.result);
-                                        const workbook = XLSX.read(data, { type: 'array' });
+                                        const data = new Uint8Array(evt.target.result), workbook = XLSX.read(data, { type: 'array' });
                                         workbookGlobal = workbook;
-                                        appData = {};
-                                        workbook.SheetNames.forEach(sheetName => {
-                                                const worksheet = workbook.Sheets[sheetName];
-                                                const json = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
-                                                appData[sheetName] = json;
+                                        let excelSheets = workbook.SheetNames, targetKeys = currentLang === 'en' ? fixedKeysEn : fixedKeysAr;
+                                        targetKeys.forEach((fixedKey, idx) => {
+                                                let excelSheetName = excelSheets[idx];
+                                                if (excelSheetName && workbook.Sheets[excelSheetName]) appData[fixedKey] = XLSX.utils.sheet_to_json(workbook.Sheets[excelSheetName], { defval: "" });
+                                                else if (!appData[fixedKey]) appData[fixedKey] = [];
                                         });
                                         saveDataToStorage();
-                                        const sheets = Object.keys(appData);
-                                        currentSheet = sheets.length > 0 ? sheets[0] : "";
+                                        currentSheet = targetKeys[0];
                                         renderTabs();
                                         renderDashboard();
-                                        alert('✅ تم قراءة ملف الإكسل وجميع الأقسام بنجاح!');
-                                } catch(err) {
-                                        console.error(err);
-                                        alert('❌ حدث خطأ أثناء قراءة ملف الإكسل. تأكد من صحة الملف.');
-                                }
+                                        alert(translations[currentLang].successAlert);
+                                } catch(err) { console.error(err); }
                         };
                         reader.readAsArrayBuffer(file);
                 }
 
                 function renderTabs() {
-                        const container = document.getElementById('tabsContainer');
-                        container.innerHTML = '';
-                        const sheets = Object.keys(appData);
-                        if (sheets.length === 0) {
-                                container.innerHTML = '<span class="text-xs text-slate-400 py-2">لا توجد أقسام محملة حالياً.</span>';
-                                return;
-                        }
-                        sheets.forEach(sheetName => {
-                                const isActive = sheetName === currentSheet;
-                                const btn = document.createElement('button');
-                                btn.className = `px-5 py-2.5 rounded-xl font-bold text-sm transition-all flex items-center gap-2 border ${
-                                        isActive 
-                                                ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white border-cyan-400/50 shadow-lg shadow-cyan-500/25' 
-                                                : 'glass-panel text-slate-300 hover:bg-slate-800/80 border-slate-700/50'
-                                }`;
+                        const container = document.getElementById('tabsContainer'); container.innerHTML = '';
+                        const sheets = Object.keys(appData); if (sheets.length === 0) return;
+                        sheets.forEach((sheetName) => {
+                                const isActive = sheetName === currentSheet, btn = document.createElement('button');
+                                btn.type = 'button';
+                                btn.className = `px-5 py-2.5 rounded-xl font-bold text-sm transition-all flex items-center gap-2 border cursor-pointer ${isActive ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white border-cyan-400/50 shadow-lg' : 'glass-panel text-slate-300 hover:bg-slate-800/80 border-slate-700/50'}`;
                                 btn.innerHTML = `<i class="fa-solid fa-table-cells"></i> ${sheetName} <span class="text-xs px-2 py-0.5 rounded-full bg-black/30">${appData[sheetName].length}</span>`;
-                                btn.onclick = () => {
-                                        currentSheet = sheetName;
-                                        renderTabs();
-                                        renderDashboard();
-                                };
+                                btn.onclick = () => { currentSheet = sheetName; searchQuery = ""; document.getElementById('searchInput').value = ""; renderTabs(); renderDashboard(); };
                                 container.appendChild(btn);
                         });
                 }
 
                 function renderDashboard() {
                         if (!currentSheet || !appData[currentSheet]) return;
-                        const rows = appData[currentSheet];
-                        const filteredRows = rows.filter(row => {
+                        const rows = appData[currentSheet], filteredRows = rows.filter(row => {
                                 if (!searchQuery) return true;
-                                return Object.values(row).some(val => 
-                                         String(val).toLowerCase().includes(searchQuery.toLowerCase())
-                                );
+                                return Object.values(row).some(val => String(val).toLowerCase().includes(searchQuery.toLowerCase()));
                         });
                         document.getElementById('totalRecordsBadge').innerText = rows.length;
-                        document.getElementById('tableCountInfo').innerText = `عرض ${filteredRows.length} من ${rows.length} سجل`;
+                        document.getElementById('tableCountInfo').innerText = `${rows.length} ${currentLang === 'ar' ? 'سجل' : 'records'}`;
                         renderTableHeaders(rows);
                         renderTableBody(filteredRows);
                         renderCompactDonutChart(rows);
                 }
 
                 function renderTableHeaders(rows) {
-                        const headerTr = document.getElementById('tableHeader');
-                        if (rows.length === 0) {
-                                headerTr.innerHTML = '<th class="p-3.5 text-center">لا توجد بيانات في هذا القسم</th>';
-                                return;
-                        }
-                        const keys = Object.keys(rows[0]);
-                        let html = '';
-                        keys.forEach(key => {
-                                html += `<th class="p-3.5 px-4 font-semibold">${key}</th>`;
-                        });
-                        html += `<th class="p-3.5 text-center font-semibold">إجراء</th>`;
+                        const headerTr = document.getElementById('tableHeader'); if (rows.length === 0) return;
+                        let html = ''; Object.keys(rows[0]).forEach(key => { html += `<th class="p-3.5 px-4 font-semibold">${key}</th>`; });
                         headerTr.innerHTML = html;
                 }
 
                 function renderTableBody(filteredRows) {
                         const tbody = document.getElementById('tableBody');
-                        if (filteredRows.length === 0) {
-                                tbody.innerHTML = `<tr><td colspan="20" class="text-center py-12 text-slate-400">لا توجد نتائج مطابقة للبحث</td></tr>`;
-                                return;
-                        }
-                        const rawRows = appData[currentSheet];
-                        let html = '';
+                        if (filteredRows.length === 0) { tbody.innerHTML = `<tr><td colspan="20" class="text-center py-12 text-slate-400">${currentLang === 'ar' ? 'لا توجد نتائج مطابقة' : 'No results found'}</td></tr>`; return; }
+                        const rawRows = appData[currentSheet]; let html = '';
                         filteredRows.forEach(row => {
                                 const origIndex = rawRows.indexOf(row);
-                                html += `<tr class="hover:bg-slate-800/40 transition-colors border-b border-slate-800/40">`;
-                                Object.entries(row).forEach(([key, val]) => {
-                                        if (key === 'اسم الجهاز' || key === 'اسم الموظف') {
-                                                html += `<td class="p-3.5 px-4">
-                                                        <button onclick="openDetailsModal(${origIndex})" class="text-cyan-400 hover:text-cyan-300 font-bold underline underline-offset-4 decoration-cyan-500/40 hover:decoration-cyan-400 transition-all text-right flex items-center gap-1.5">
-                                                                <i class="fa-solid fa-circle-info text-xs opacity-75"></i> ${val || '<span class="text-slate-600">- فارغ -</span>'}
-                                                        </button>
-                                                </td>`;
-                                        } else {
-                                                html += `<td class="p-3.5 px-4 text-slate-300 truncate max-w-[200px]" title="${val}">${val || '<span class="text-slate-600">-</span>'}</td>`;
-                                        }
-                                });
-                                html += `<td class="p-3.5 text-center">
-                                        <button onclick="requestEdit(${origIndex})" class="w-8 h-8 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/40 text-cyan-300 transition-all inline-flex items-center justify-center border border-cyan-500/30" title="تعديل السجل">
-                                                <i class="fa-solid fa-pen text-xs"></i>
-                                        </button>
-                                </td>`;
+                                html += `<tr class="border-b transition-colors"><td class="p-3.5 px-4">`;
+                                Object.entries(row).forEach(([key, val], i) => { if (i === 0) html += `<button type="button" onclick="openDetailsModal('${currentSheet}', ${origIndex})" class="text-cyan-400 hover:text-cyan-300 font-bold underline cursor-pointer flex items-center gap-1.5"><i class="fa-solid fa-circle-info text-xs"></i> ${val || '-'}</button>`; });
+                                html += `</td>`;
+                                let idx = 0; Object.entries(row).forEach(([key, val]) => { if (idx > 0) html += `<td class="p-3.5 px-4">${val || '-'}</td>`; idx++; });
                                 html += `</tr>`;
                         });
                         tbody.innerHTML = html;
                 }
 
-                function filterTable() {
-                        searchQuery = document.getElementById('searchInput').value;
+                function filterTable() { searchQuery = document.getElementById('searchInput').value; renderDashboard(); }
+
+                function filterByDepartment(deptName) {
+                        searchQuery = deptName;
+                        document.getElementById('searchInput').value = deptName;
                         renderDashboard();
                 }
 
                 function renderCompactDonutChart(rows) {
                         const deptCounts = {};
                         rows.forEach(r => {
-                                let dept = (r['القسم'] || '').trim();
-                                if (!dept) dept = 'غير مصنف';
+                                let deptKey = Object.keys(r).find(k => k.includes('القسم') || k.toLowerCase().includes('dept') || k.toLowerCase().includes('department')) || Object.keys(r)[3] || 'القسم';
+                                let dept = (r[deptKey] || '').trim() || (currentLang === 'ar' ? 'أخرى' : 'Other');
                                 deptCounts[dept] = (deptCounts[dept] || 0) + 1;
                         });
-                        const labels = Object.keys(deptCounts);
-                        const dataVals = Object.values(deptCounts);
-                        const total = rows.length;
-                        const ctx = document.getElementById('deptDonutChart').getContext('2d');
-                        if (departmentChart) {
-                                departmentChart.destroy();
-                        }
-                        const colors = [
-                                '#38bdf8', '#818cf8', '#c084fc', '#f472b6', '#34d399', 
-                                '#fbbf24', '#fb7185', '#22d3ee', '#a78bfa', '#4ade80'
-                        ];
+                        const labels = Object.keys(deptCounts), dataVals = Object.values(deptCounts), ctx = document.getElementById('deptDonutChart').getContext('2d');
+                        if (departmentChart) departmentChart.destroy();
                         departmentChart = new Chart(ctx, {
                                 type: 'doughnut',
-                                data: {
-                                        labels: labels,
-                                        datasets: [{
-                                                data: dataVals,
-                                                backgroundColor: colors.slice(0, labels.length),
-                                                borderWidth: 2,
-                                                borderColor: '#1e293b',
-                                                hoverOffset: 4
-                                        }]
-                                },
-                                options: {
-                                        responsive: true,
-                                        maintainAspectRatio: false,
-                                        plugins: {
-                                                legend: { display: false },
-                                                tooltip: {
-                                                        callbacks: {
-                                                                label: function(context) {
-                                                                        let val = context.raw;
-                                                                        let percentage = total > 0 ? ((val / total) * 100).toFixed(1) : 0;
-                                                                        return ` ${context.label}: ${val} (${percentage}%)`;
-                                                                }
-                                                        }
-                                                }
-                                        },
-                                        cutout: '75%'
-                                }
+                                data: { labels: labels, datasets: [{ data: dataVals, backgroundColor: ['#38bdf8', '#818cf8', '#c084fc', '#f472b6', '#34d399', '#fbbf24'] }] },
+                                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, cutout: '70%' }
                         });
-
-                        const legendContainer = document.getElementById('chartLegend');
-                        let legendHtml = '';
+                        const legendContainer = document.getElementById('chartLegend'); let legendHtml = '';
                         labels.forEach((lbl, idx) => {
-                                let count = deptCounts[lbl];
-                                let pct = total > 0 ? ((count / total) * 100).toFixed(1) : 0;
-                                let color = colors[idx % colors.length];
-                                
-                                legendHtml += `
-                                        <div class="glass-panel-hover p-2 px-3 rounded-xl bg-slate-800/40 border border-slate-700/50 flex items-center gap-3 shrink-0 min-w-[140px]">
-                                                <span class="w-3 h-3 rounded-full shrink-0" style="background-color: ${color};"></span>
-                                                <div class="flex flex-col">
-                                                        <span class="text-xs font-semibold text-slate-200 truncate max-w-[100px]" title="${lbl}">${lbl}</span>
-                                                        <span class="text-[10px] text-slate-400">${count} جهاز <span class="text-cyan-400">(${pct}%)</span></span>
-                                                </div>
-                                        </div>
-                                `;
+                                legendHtml += `<div onclick="filterByDepartment('${lbl}')" class="glass-panel px-3 py-2 rounded-xl flex items-center gap-3 shrink-0 cursor-pointer hover:border-cyan-400 hover:scale-105 transition-all group" title="انقر لعرض أجهزة القسم"><span class="w-3 h-3 rounded-full" style="background-color: ${departmentChart.data.datasets[0].backgroundColor[idx%6]};"></span><div class="text-xs"><div class="font-bold group-hover:text-cyan-300">${lbl}</div><div class="text-[10px] text-cyan-400">${deptCounts[lbl]} ${currentLang === 'ar' ? 'جهاز' : 'devices'}</div></div></div>`;
                         });
-                        legendContainer.innerHTML = legendHtml || '<div class="text-slate-500 text-xs py-2">لا توجد بيانات للأقسام</div>';
+                        legendContainer.innerHTML = legendHtml;
                 }
 
-                function openDetailsModal(index) {
-                        const row = appData[currentSheet][index];
-                        if (!row) return;
-                        document.getElementById('modalDeviceTitle').innerText = row['اسم الجهاز'] || 'تفاصيل الجهاز غير متوفرة';
-                        document.getElementById('modalDeviceSub').innerText = `الموظف المسؤول: ${row['اسم الموظف'] || 'غير محدد'} | القسم: ${row['القسم'] || 'غير مصنف'}`;
-                        const grid = document.getElementById('modalSpecsGrid');
-                        let html = '';
-                        const iconsMap = {
-                                'اسم الموظف': 'fa-user',
-                                'القسم': 'fa-building',
-                                'اسم الجهاز': 'fa-laptop',
-                                'المعالج': 'fa-microchip',
-                                'الرام': 'fa-memory',
-                                'لوحة الام': 'fa-server',
-                                'نوع الشاشة': 'fa-desktop',
-                                'كرت الشاشة': 'fa-gamepad',
-                                'الهارد': 'fa-hard-drive',
-                                'سواقة': 'fa-compact-disc',
-                                'بفلات': 'fa-volume-high',
-                                'طابعة': 'fa-print',
-                                'نظام الجهاز': 'fa-windows',
-                                'ملاحظة': 'fa-note-sticky'
-                        };
-                        Object.entries(row).forEach(([key, val]) => {
-                                let icon = iconsMap[key] || 'fa-circle-dot';
-                                html += `
-                                        <div class="p-3.5 rounded-2xl bg-slate-800/60 border border-slate-700/50 flex flex-col justify-between">
-                                                <div class="flex items-center gap-2 text-cyan-400 text-xs font-semibold mb-1">
-                                                        <i class="fa-solid ${icon}"></i> ${key}
-                                                </div>
-                                                <div class="text-slate-200 text-sm font-bold truncate" title="${val}">${val || '<span class="text-slate-600">- فارغ -</span>'}</div>
-                                        </div>
-                                `;
+                function openDetailsModal(sheetName, index) {
+                        currentActiveDetailsRef = { sheetName, index };
+                        const row = appData[sheetName][index]; if (!row) return;
+                        const keysArr = Object.keys(row);
+                        document.getElementById('modalDeviceTitle').innerText = row[keysArr[2]] || row[keysArr[1]] || (currentLang === 'ar' ? 'جهاز' : 'Device');
+                        const grid = document.getElementById('modalSpecsGrid'); let html = '';
+                        Object.entries(row).forEach(([k, v]) => {
+                                html += `<div class="p-3.5 rounded-2xl glass-panel"><label class="text-cyan-400 text-xs font-semibold mb-1 block">${k}</label><input type="text" name="spec_field_${k}" value="${v !== undefined ? v : ''}" class="w-full px-3 py-2 rounded-xl glass-input text-sm font-medium"></div>`;
                         });
                         grid.innerHTML = html;
                         document.getElementById('detailsModal').classList.remove('hidden');
                 }
 
-                function closeDetailsModal() {
-                        document.getElementById('detailsModal').classList.add('hidden');
-                }
+                function closeDetailsModal() { document.getElementById('detailsModal').classList.add('hidden'); }
 
-                function requestEdit(index) {
-                        pendingEditIndex = index;
-                        document.getElementById('passwordInput').value = '';
-                        document.getElementById('passwordError').classList.add('hidden');
-                        document.getElementById('passwordModal').classList.remove('hidden');
-                }
-
-                function closePasswordModal() {
-                        document.getElementById('passwordModal').classList.add('hidden');
-                        pendingEditIndex = null;
-                }
-
-                function verifyPassword() {
-                        const pwd = document.getElementById('passwordInput').value;
-                        if (pwd === 'groupit') {
-                                document.getElementById('passwordModal').classList.add('hidden');
-                                openEditModal(pendingEditIndex);
-                        } else {
-                                document.getElementById('passwordError').classList.remove('hidden');
-                        }
-                }
-
-                function openEditModal(index) {
-                        const row = appData[currentSheet][index];
-                        if (!row) return;
-                        const form = document.getElementById('editForm');
-                        form.innerHTML = '';
-                        Object.entries(row).forEach(([key, val]) => {
-                                form.innerHTML += `
-                                        <div class="flex flex-col gap-1.5">
-                                                <label class="text-xs text-cyan-300 font-semibold">${key}</label>
-                                                <input type="text" name="${key}" value="${val !== undefined ? val : ''}" class="px-3.5 py-2 rounded-xl glass-input text-sm">
-                                        </div>
-                                `;
-                        });
-                        document.getElementById('editModal').classList.remove('hidden');
-                }
-
-                function closeEditModal() {
-                        document.getElementById('editModal').classList.add('hidden');
-                        pendingEditIndex = null;
-                }
-
-                function saveEditedRecord(e) {
+                function saveEditedDeviceSpecs(e) {
                         e.preventDefault();
-                        if (pendingEditIndex === null) return;
-                        const form = document.getElementById('editForm');
-                        const inputs = form.querySelectorAll('input');
-                        const updatedRow = {};
-                        inputs.forEach(inp => {
-                                updatedRow[inp.name] = inp.value;
+                        if (!currentActiveDetailsRef) return;
+                        const { sheetName, index } = currentActiveDetailsRef, row = appData[sheetName][index]; if (!row) return;
+                        let editChangesList = [];
+                        Object.keys(row).forEach(k => {
+                                const inputEl = document.querySelector(`[name="spec_field_${k}"]`);
+                                if (inputEl) { const newVal = inputEl.value; if (row[k] !== newVal) { editChangesList.push({ field: k, val: newVal }); row[k] = newVal; } }
                         });
-                        appData[currentSheet][pendingEditIndex] = updatedRow;
-                        saveDataToStorage();
-                        renderDashboard();
-                        closeEditModal();
-                        alert('✅ تم تحديث السجل بنجاح!');
+                        if (editChangesList.length > 0) {
+                                const keysArr = Object.keys(row), devName = row[keysArr[2]] || row[keysArr[1]] || 'Device';
+                                const today = new Date(), dateStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+                                maintenanceData.unshift({ id: Date.now(), technicianName: currentUserRole === 'admin' ? "مدير النظام (Admin)" : "مستعرض", deviceName: devName, editBlocks: editChangesList, isEdit: true, datetime: dateStr, dateOnly: dateStr, sheetName: sheetName, index: index });
+                        }
+                        saveDataToStorage(); closeDetailsModal(); renderDashboard(); alert(translations[currentLang].successAlert);
                 }
 
-                // Maintenance Functions
-                function openMaintenanceModal() {
-                        const select = document.getElementById('maintDeviceSelect');
-                        select.innerHTML = '<option value="">-- اختر جهازاً من القائمة --</option>';
-                        selectedDeviceReference = null;
-                        document.getElementById('editDeviceSpecsBtn').disabled = true;
-                        document.getElementById('editDeviceSpecsBtn').className = "px-3 py-1.5 rounded-lg bg-cyan-600/50 text-slate-400 text-xs font-bold transition-all";
+                function openAddDeviceModal() {
+                        if (currentUserRole !== 'admin') return;
+                        const datalist = document.getElementById('existingDeptsList'); datalist.innerHTML = '';
+                        const deptsSet = new Set();
+                        if (appData[currentSheet] && appData[currentSheet].length > 0) {
+                                const sampleRow = appData[currentSheet][0], deptKey = Object.keys(sampleRow).find(k => k.includes('القسم') || k.toLowerCase().includes('dept') || k.toLowerCase().includes('department')) || Object.keys(sampleRow)[3];
+                                appData[currentSheet].forEach(r => { if (r[deptKey]) deptsSet.add(r[deptKey]); });
+                        }
+                        if (deptsSet.size === 0) ['إدارة', 'الصيانة', 'الاستقبال', 'المحاسبة'].forEach(d => deptsSet.add(d));
+                        deptsSet.forEach(d => { const opt = document.createElement('option'); opt.value = d; datalist.appendChild(opt); });
+                        const extraContainer = document.getElementById('addDeviceExtraFieldsContainer'); extraContainer.innerHTML = '';
+                        if (appData[currentSheet] && appData[currentSheet].length > 0) {
+                                const sampleRow = appData[currentSheet][0], keys = Object.keys(sampleRow);
+                                keys.slice(4).forEach(k => { extraContainer.innerHTML += `<div><label class="text-xs text-cyan-300 font-semibold mb-1.5 block">${k}</label><input type="text" name="dynamic_field_${k}" placeholder="أدخل ${k}..." class="w-full px-3.5 py-2.5 rounded-xl glass-input text-sm"></div>`; });
+                        }
+                        document.getElementById('addTechnicianInput').value = ''; document.getElementById('addDeviceNameInput').value = ''; document.getElementById('addDeviceDeptInput').value = ''; document.getElementById('addDeviceIpInput').value = '';
+                        document.getElementById('addDeviceModal').classList.remove('hidden');
+                }
 
-                        Object.keys(appData).forEach(sheetName => {
-                                appData[sheetName].forEach((row, idx) => {
-                                        let devName = row['اسم الجهاز'];
-                                        if (devName) {
-                                                const opt = document.createElement('option');
-                                                opt.value = `${sheetName}:::${idx}`;
-                                                opt.text = `${devName} (قسم: ${sheetName})`;
-                                                select.appendChild(opt);
-                                        }
+                function closeAddDeviceModal() { document.getElementById('addDeviceModal').classList.add('hidden'); }
+
+                function saveNewDevice(e) {
+                        e.preventDefault();
+                        const techName = document.getElementById('addTechnicianInput').value, deviceName = document.getElementById('addDeviceNameInput').value, deptName = document.getElementById('addDeviceDeptInput').value, ipAddr = document.getElementById('addDeviceIpInput').value;
+                        if (!appData[currentSheet]) appData[currentSheet] = [];
+                        let newRecord = {};
+                        if (appData[currentSheet].length > 0) {
+                                const sampleRow = appData[currentSheet][0], keys = Object.keys(sampleRow);
+                                keys.forEach((k, idx) => {
+                                        if (idx === 0) newRecord[k] = appData[currentSheet].length + 1;
+                                        else if (idx === 1) newRecord[k] = deviceName;
+                                        else if (idx === 2) newRecord[k] = deviceName;
+                                        else if (idx === 3 || k.includes('القسم') || k.toLowerCase().includes('dept')) newRecord[k] = deptName;
+                                        else if (idx === 4 || k.includes('IP') || k.toLowerCase().includes('ip')) newRecord[k] = ipAddr;
+                                        else { const fieldInput = document.querySelector(`[name="dynamic_field_${k}"]`); newRecord[k] = fieldInput ? fieldInput.value : ''; }
                                 });
-                        });
+                        } else {
+                                newRecord = { "مسلسل": 1, "اسم الجهاز": deviceName, "Device Name": deviceName, "القسم": deptName, "عنوان IP": ipAddr };
+                        }
+                        appData[currentSheet].push(newRecord); saveDataToStorage(); closeAddDeviceModal(); renderDashboard(); alert(translations[currentLang].successAlert);
+                }
 
-                        document.getElementById('maintNotes').value = '';
+                function openMaintenanceModal() {
+                        populateMaintenanceDeviceSelect();
+                        document.getElementById('maintTechnicianInput').value = ''; document.getElementById('maintNotes').value = '';
+                        const today = new Date(); document.getElementById('maintDateInput').value = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
                         document.getElementById('maintenanceModal').classList.remove('hidden');
                 }
 
-                function closeMaintenanceModal() {
-                        document.getElementById('maintenanceModal').classList.add('hidden');
+                function closeMaintenanceModal() { document.getElementById('maintenanceModal').classList.add('hidden'); }
+
+                function populateMaintenanceDeviceSelect() {
+                        const select = document.getElementById('maintDeviceSelect'); select.innerHTML = `<option value="" data-i18n="selectDeviceDefault">${translations[currentLang].selectDeviceDefault}</option>`;
+                        Object.entries(appData).forEach(([sheetName, rows]) => {
+                                rows.forEach((row, idx) => {
+                                        const keysArr = Object.keys(row), devName = row[keysArr[2]] || row[keysArr[1]] || `Device_${idx+1}`;
+                                        const opt = document.createElement('option'); opt.value = `${sheetName}___${idx}`; opt.textContent = devName; select.appendChild(opt);
+                                });
+                        });
+                        document.getElementById('editDeviceSpecsBtn').disabled = true;
                 }
 
                 function onMaintenanceDeviceSelected(val) {
                         const btn = document.getElementById('editDeviceSpecsBtn');
                         if (val) {
-                                selectedDeviceReference = val;
-                                btn.disabled = false;
-                                btn.className = "px-3 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold transition-all shadow-md shadow-cyan-600/30 cursor-pointer";
+                                btn.disabled = false; btn.className = "px-3 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold transition-all cursor-pointer";
+                                const parts = val.split('___'); selectedDeviceReference = { sheetName: parts[0], index: parseInt(parts[1]) };
                         } else {
-                                selectedDeviceReference = null;
-                                btn.disabled = true;
-                                btn.className = "px-3 py-1.5 rounded-lg bg-cyan-600/50 text-slate-400 text-xs font-bold transition-all";
+                                btn.disabled = true; btn.className = "px-3 py-1.5 rounded-lg bg-cyan-600/50 text-slate-400 text-xs font-bold transition-all"; selectedDeviceReference = null;
                         }
                 }
 
-                function openEditSelectedDeviceSpecs() {
-                        if (!selectedDeviceReference) return;
-                        const parts = selectedDeviceReference.split(':::');
-                        const sheet = parts[0];
-                        const idx = parseInt(parts[1]);
-                        currentSheet = sheet;
-                        renderTabs();
-                        renderDashboard();
-                        closeMaintenanceModal();
-                        requestEdit(idx);
-                }
+                function openEditSelectedDeviceSpecs() { if (!selectedDeviceReference) return; closeMaintenanceModal(); openDetailsModal(selectedDeviceReference.sheetName, selectedDeviceReference.index); }
 
                 function saveMaintenanceTask(e) {
                         e.preventDefault();
-                        const select = document.getElementById('maintDeviceSelect');
-                        const notes = document.getElementById('maintNotes').value.trim();
-
-                        if (!select.value || !notes) {
-                                alert('⚠️ يرجى اختيار الجهاز وإدخال الملاحظات/العمل المنجز.');
-                                return;
+                        const tech = document.getElementById('maintTechnicianInput').value, devSelectVal = document.getElementById('maintDeviceSelect').value, dateVal = document.getElementById('maintDateInput').value, notes = document.getElementById('maintNotes').value;
+                        let devNameText = "General Device";
+                        if (devSelectVal) {
+                                const [sName, sIdx] = devSelectVal.split('___'), row = appData[sName][sIdx];
+                                if (row) { const keysArr = Object.keys(row); devNameText = row[keysArr[2]] || row[keysArr[1]] || "Device"; }
                         }
-
-                        const parts = select.value.split(':::');
-                        const sheet = parts[0];
-                        const idx = parseInt(parts[1]);
-                        const rowData = appData[sheet][idx];
-                        const deviceName = rowData ? (rowData['اسم الجهاز'] || 'غير معروف') : 'غير معروف';
-
-                        const now = new Date();
-                        const dateOnlyStr = now.toISOString().split('T')[0]; // Format: YYYY-MM-DD
-                        const fullDateTimeStr = now.toLocaleString('ar-SA');
-
-                        maintenanceData.push({
-                                device: deviceName,
-                                notes: notes,
-                                dateStr: fullDateTimeStr,
-                                rawDate: dateOnlyStr
-                        });
-
-                        saveDataToStorage();
-                        closeMaintenanceModal();
-                        alert('✅ تم تسجيل مهمة الصيانة وإضافتها إلى جدول الملاحظات بنجاح!');
+                        maintenanceData.unshift({ id: Date.now(), technicianName: tech, deviceName: devNameText, editBlocks: [{ field: "Maintenance", val: notes }], isEdit: false, datetime: dateVal, dateOnly: dateVal });
+                        saveDataToStorage(); closeMaintenanceModal(); alert(translations[currentLang].successAlert);
                 }
 
-                function openMaintenanceReportModal() {
-                        document.getElementById('filterDateFrom').value = '';
-                        document.getElementById('filterDateTo').value = '';
-                        renderMaintenanceReportTable();
-                        document.getElementById('maintenanceReportModal').classList.remove('hidden');
-                }
+                function openMaintenanceReportModal() { renderMaintenanceReportTable(); document.getElementById('maintenanceReportModal').classList.remove('hidden'); }
+                function closeMaintenanceReportModal() { document.getElementById('maintenanceReportModal').classList.add('hidden'); }
 
-                function closeMaintenanceReportModal() {
-                        document.getElementById('maintenanceReportModal').classList.add('hidden');
-                }
-
-                function resetDateFilter() {
-                        document.getElementById('filterDateFrom').value = '';
-                        document.getElementById('filterDateTo').value = '';
-                        renderMaintenanceReportTable();
-                }
+                function resetDateFilter() { document.getElementById('filterDateFrom').value = ''; document.getElementById('filterDateTo').value = ''; renderMaintenanceReportTable(); }
 
                 function renderMaintenanceReportTable() {
-                        const tbody = document.getElementById('maintenanceReportTableBody');
-                        const dateFrom = document.getElementById('filterDateFrom').value;
-                        const dateTo = document.getElementById('filterDateTo').value;
-
-                        let filteredTasks = maintenanceData.filter(task => {
-                                if (!task.rawDate) return true;
-                                if (dateFrom && task.rawDate < dateFrom) return false;
-                                if (dateTo && task.rawDate > dateTo) return false;
-                                return true;
+                        const tbody = document.getElementById('maintenanceReportTableBody'), dateFrom = document.getElementById('filterDateFrom')?.value, dateTo = document.getElementById('filterDateTo')?.value;
+                        const filtered = maintenanceData.filter(item => {
+                                if (!dateFrom && !dateTo) return true;
+                                const itemDate = item.dateOnly || item.datetime.split(' ')[0];
+                                if (dateFrom && itemDate < dateFrom) return false; if (dateTo && itemDate > dateTo) return false; return true;
                         });
-
-                        if (filteredTasks.length === 0) {
-                                tbody.innerHTML = `<tr><td colspan="4" class="text-center py-12 text-slate-400">لا توجد سجلات صيانة مطابقة للفترة المحددة</td></tr>`;
-                        } else {
-                                let html = '';
-                                filteredTasks.forEach((task) => {
-                                        const origIdx = maintenanceData.indexOf(task);
-                                        html += `
-                                                <tr class="hover:bg-slate-800/40 transition-colors border-b border-slate-800/40">
-                                                        <td class="p-3.5 px-4 font-bold text-amber-300">${task.device}</td>
-                                                        <td class="p-3.5 px-4 text-slate-200">${task.notes}</td>
-                                                        <td class="p-3.5 px-4 text-slate-400 text-xs">${task.dateStr}</td>
-                                                        <td class="p-3.5 text-center">
-                                                                <button onclick="deleteMaintenanceTask(${origIdx})" class="w-8 h-8 rounded-lg bg-rose-500/20 hover:bg-rose-500/40 text-rose-300 transition-all inline-flex items-center justify-center border border-rose-500/30" title="حذف السجل">
-                                                                        <i class="fa-solid fa-trash text-xs"></i>
-                                                                </button>
-                                                        </td>
-                                                </tr>
-                                        `;
-                                });
-                                tbody.innerHTML = html;
-                        }
+                        if (filtered.length === 0) { tbody.innerHTML = `<tr><td colspan="5" class="text-center py-12 text-slate-400">${currentLang === 'ar' ? 'لا توجد سجلات صيانة مسجلة' : 'No maintenance records found'}</td></tr>`; return; }
+                        let html = '';
+                        filtered.forEach((item, idx) => {
+                                let detailsText = '';
+                                if (item.isEdit && item.editBlocks) {
+                                        if (item.deviceName.includes('Deleted')) detailsText = `<span class="text-rose-400 font-bold">[Deleted Device: ${item.deviceName}]</span> `;
+                                        else detailsText = `<span class="text-cyan-400 font-bold">[Specs Update: ${item.deviceName}]</span> `;
+                                        item.editBlocks.forEach(b => { detailsText += `${b.field}: ${b.val} | `; });
+                                } else {
+                                        detailsText = `<span class="text-amber-400 font-bold">[Maintenance: ${item.deviceName}]</span> ${item.editBlocks[0].val}`;
+                                }
+                                html += `<tr class="border-b transition-colors hover:bg-white/5"><td class="p-3.5 px-4 text-center font-bold text-slate-300">${idx + 1}</td><td class="p-3.5 px-4 font-semibold">${item.technicianName}</td><td class="p-3.5 px-4 text-slate-200">${detailsText}</td><td class="p-3.5 px-4 text-slate-300 font-mono text-xs">${item.datetime}</td><td class="p-3.5 text-center no-print"><button type="button" onclick="deleteMaintenanceRecord(${item.id})" class="w-8 h-8 rounded-lg bg-rose-500/20 hover:bg-rose-500 text-rose-400 hover:text-white flex items-center justify-center transition-all mx-auto cursor-pointer" title="حذف السجل"><i class="fa-solid fa-trash-can text-xs"></i></button></td></tr>`;
+                        });
+                        tbody.innerHTML = html;
                 }
 
-                function deleteMaintenanceTask(index) {
-                        if (confirm('هل أنت متأكد من حذف سجل الصيانة هذا؟')) {
-                                maintenanceData.splice(index, 1);
-                                saveDataToStorage();
-                                renderMaintenanceReportTable();
-                        }
+                function deleteMaintenanceRecord(id) {
+                        if (currentUserRole !== 'admin') { alert(currentLang === 'ar' ? '⚠️ عذراً، صلاحيات المدير مطلوبة لحذف سجل الصيانة.' : '⚠️ Admin permission required.'); return; }
+                        maintenanceData = maintenanceData.filter(i => i.id !== id); saveDataToStorage(); renderMaintenanceReportTable();
                 }
+
+                function printReport() { window.print(); }
 
                 function exportToExcel() {
-                        if (Object.keys(appData).length === 0) {
-                                alert('⚠️ لا توجد بيانات لتصديرها.');
-                                return;
-                        }
-                        const newWb = XLSX.utils.book_new();
-                        Object.keys(appData).forEach(sheetName => {
-                                const ws = XLSX.utils.json_to_sheet(appData[sheetName]);
-                                XLSX.utils.book_append_sheet(newWb, ws, sheetName);
-                        });
-                        if (maintenanceData.length > 0) {
-                                const maintWs = XLSX.utils.json_to_sheet(maintenanceData.map(m => ({
-                                        "اسم الكمبيوتر": m.device,
-                                        "العمل المنجز / الملاحظات": m.notes,
-                                        "تاريخ الصيانة": m.dateStr
-                                })));
-                                XLSX.utils.book_append_sheet(newWb, maintWs, "سجل الصيانة");
-                        }
-                        XLSX.writeFile(newWb, 'Updated_Devices_Report.xlsx');
+                        const wsData = [];
+                        if (appData[currentSheet]) { wsData.push(Object.keys(appData[currentSheet][0] || {})); appData[currentSheet].forEach(row => wsData.push(Object.values(row))); }
+                        const ws = XLSX.utils.aoa_to_sheet(wsData), wb = XLSX.utils.book_new();
+                        XLSX.utils.book_append_sheet(wb, ws, currentSheet); XLSX.writeFile(wb, `${currentSheet}_Export.xlsx`);
                 }
         </script>
+        <h1>اعداد طارق مجركش</h1>
 </body>
 </html>
